@@ -10,9 +10,9 @@ package tetPns;
  */
 public class Transition  extends Element {
 	
-	int priority;
-	Flow myFlow = null;
-	String transId;
+	private int priority;
+	private Flow myFlow = null;
+	private String transId;
 	
 	/**
 	 * Constructor

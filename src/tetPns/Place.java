@@ -7,9 +7,9 @@ package tetPns;
  */
 
 public class Place extends Element {
-	private int tokenQuantity = 0;
 	
-	String placeId;
+	private int tokenQuantity = 0;
+	private String placeId;
 	
 	public Place() {
 		
