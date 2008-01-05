@@ -6,22 +6,22 @@ package tetPns;
  *
  */
 public class Arc {
-	private Element startElement;
-	private Element endElement;
+	private Element sourceElement;
+	private Element targetElement;
 	String arcId;
 	
 	public	Arc () {
-		this.startElement = null;
-		this.endElement = null;
+		this.sourceElement = null;
+		this.targetElement = null;
 		this.arcId = null;
 	}
 	
-	public void setStartElem(Element start) {
-		this.startElement = start;
+	public void setSourceElement(Element start) {
+		this.sourceElement = start;
 	}
 	
-	public void setEndElem(Element end) {
-		this.endElement = end;
+	public void setTargetElem(Element end) {
+		this.targetElement = end;
 	}	
 	
 	public void setId(String id) {

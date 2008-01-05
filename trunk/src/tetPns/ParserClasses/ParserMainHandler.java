@@ -1,9 +1,11 @@
 package tetPns.ParserClasses;
 
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 
 import tetPns.Arc;
-import tetPns.Element;
 import tetPns.Place;
 import tetPns.Transition;
 
@@ -15,31 +17,30 @@ import tetPns.Transition;
 
 public class ParserMainHandler implements ContentHandler {
 	public ParserMainHandler() {
-	super();	
+		super();	
 	}
 	
 	int placeCount, transitionCount, arcCount; 
-	Place lastPlace;
-	Transition lastTrans;
-	Arc lastArc;
 	boolean inPlace, inToken, inArc, inTransition, inInitialMarking;
+	private Place lastPlace;
+	private Transition lastTrans;
+	private Arc lastArc;
 	
 	
-	  public void startDocument() throws SAXException{
-	    this.placeCount = 0;
-	    this.transitionCount = 0;
-	    this.arcCount = 0;
-	    this.lastPlace = null;
-	    this.lastArc = null;
-	    this.lastTrans = null;
-	    this.inPlace = this.inToken = this.inArc = this.inTransition = this.inInitialMarking = false;
-	  }	
+	public void startDocument() throws SAXException{
+		this.placeCount = 0;
+		this.transitionCount = 0;
+		this.arcCount = 0;
+		this.lastPlace = null;
+		this.lastArc = null;
+		this.lastTrans = null;
+		this.inPlace = this.inToken = this.inArc = this.inTransition = this.inInitialMarking = false;
+	}	
 	
 	public void startElement (String uri, String name,
 		String qName, Attributes atts) {
 			
 		if (qName.equals("place")) {
-			
 			this.inPlace = true;
 			this.placeCount++;
 			this.lastPlace = new Place();
@@ -48,8 +49,6 @@ public class ParserMainHandler implements ContentHandler {
 				String nameAtt = atts.getQName(i);
 				if(nameAtt.equals("id")) this.lastPlace.setId(atts.getValue(i));
 			}
-			
-			
 		}
 		else if(qName.equals("transition")) {
 			this.transitionCount++;
@@ -59,8 +58,7 @@ public class ParserMainHandler implements ContentHandler {
 			for (int i=0; i<length; i++) {
 				String nameAtt = atts.getQName(i);
 				if(nameAtt.equals("id")) this.lastTrans.setId(atts.getValue(i));
-			}			
-
+			}		
 		}
 		else if(qName.equals("arc")) {
 			this.arcCount++;
