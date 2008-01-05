@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+
+= DIAGRAMMA DELLE CLASSI =
+
+Il diagramma delle classi può variare in base al fatto di fare o meno l'interfaccia grafica.
+Se facciamo l'interfaccia grafica è meglio creare una classe astratta che generalizzi tutti gli elementi della rete di Petri, altrimenti no.
+
+Inoltre secondo me la classe Element è inutile perchè non ha senso associare ai Place gli archi che gli entrano e che gli escono (a meno di non doverli disegnare).
+
+Scusa la rozzezza della pagina.
