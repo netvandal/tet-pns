@@ -1,5 +1,7 @@
 package tetPns;
 
+import tetPns.ParserClasses.Parser;
+
 /**
  * tetPns is a simple Petri net simulator
  * @author Michele Tameni, Alessio Troiano

@@ -1,4 +1,4 @@
-package tetPns;
+package tetPns.ParserClasses;
 
 import org.xml.sax.*;
 
