@@ -9,9 +9,8 @@ package tetPns;
  *
  */
 public class Transition  extends Element {
-	private static final int MAXPRIORITY = 10;
 	
-	int priority = MAXPRIORITY;
+	int priority;
 	Flow myFlow = null;
 	String transId;
 	
@@ -32,7 +31,6 @@ public class Transition  extends Element {
 	}
 	
 	public void setPriority(int p) {
-		if(p>MAXPRIORITY) p = 10;
 		this.priority = p;
 	}
 	
