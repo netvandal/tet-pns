@@ -7,4 +7,7 @@ Se facciamo l'interfaccia grafica è meglio creare una classe astratta che gener
 
 Inoltre secondo me la classe Element è inutile perchè non ha senso associare ai Place gli archi che gli entrano e che gli escono (a meno di non doverli disegnare).
 
+Non so perchè nel momento di esportare il file mi ha tagliato il metodo fire() della classe Transition.
+
+
 Scusa la rozzezza della pagina.
