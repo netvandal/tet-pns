@@ -5,6 +5,8 @@ package tetPns;
  * @author Michele Tameni, Alessio Troiano
  * 
  */
+
+
 public class TetPns {
 
 	/**
@@ -12,8 +14,9 @@ public class TetPns {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Ola");
-		Flow test = new Flow();
+
+		Parser myParser = new Parser();
+		
 	}
 
 	
