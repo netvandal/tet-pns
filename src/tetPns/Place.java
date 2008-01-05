@@ -28,7 +28,7 @@ public class Place extends Element {
 		return this.placeId;
 	}
 	
-	public void placeInfo() {
+	public void getInfo() {
 		System.out.println("Creato place " + this.placeId + " con " + this.tokenQuantity + " Token");		
 	}
 	
