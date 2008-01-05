@@ -2,6 +2,8 @@ package tetPns.ParserClasses;
 
 import org.xml.sax.*;
 
+import tetPns.Place;
+
 /**
  * The main handler for the pnml parser
  * @author michele
@@ -14,21 +16,38 @@ public class ParserMainHandler implements ContentHandler {
 	}
 	
 	int placeCount, transitionCount, arcCount; 
+	Place lastPlace;
+	boolean inPlace, inToken, inArc, inTransition, inInitialMarking;
+	
 	
 	  public void startDocument() throws SAXException{
 	    this.placeCount = 0;
 	    this.transitionCount = 0;
 	    this.arcCount = 0;
+	    this.lastPlace = null;
+	    this.inPlace = this.inToken = this.inArc = this.inTransition = this.inInitialMarking = false;
 	  }	
 	
 	public void startElement (String uri, String name,
 			String qName, Attributes atts) {
-		
-		
-		
-		if (qName.equals("place")) this.placeCount++;
+			
+		if (qName.equals("place")) {
+			
+			this.inPlace = true;
+			this.placeCount++;
+			this.lastPlace = new Place();
+			int length = atts.getLength();
+			for (int i=0; i<length; i++) {
+				String nameAtt = atts.getQName(i);
+				if(nameAtt.equals("id")) this.lastPlace.setId(atts.getValue(i));
+			}
+			
+			
+		}
 		else if(qName.equals("transition")) this.transitionCount++;
 		else if(qName.equals("arc")) this.arcCount++;
+		else if(qName.equals("initialMarking") && this.inPlace) this.inInitialMarking = true;
+		else if(qName.equals("text") && this.inPlace && this.inInitialMarking) this.inToken=true;
 
 //		
 //		int length = atts.getLength();
@@ -43,13 +62,22 @@ public class ParserMainHandler implements ContentHandler {
 
 	}
 
-	public void endElement (String uri, String name, String qName)
-	{
+	public void endElement (String uri, String name, String qName) {
+		if(qName.equals("place") && this.inPlace) {
+			this.lastPlace.placeInfo();
+			this.inPlace = false;
+		} else if(qName.equals("text") && this.inPlace && this.inToken) {
+			this.inToken = false;
+		} else if(qName.equals("initialMarking")) {
+			this.inInitialMarking = false;
+		}	else if(qName.equals("text") && this.inToken) this.inToken = false;		
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		// TODO Auto-generated method stub
-		
+	public void characters(char[] ch, int start, int len) {
+		String content = new String(ch,start,len);
+		if(this.lastPlace != null && this.inPlace && this.inInitialMarking && this.inToken)  {
+			this.lastPlace.addToken(Integer.parseInt(content));
+		}
 	}
 
 	public void endDocument() throws SAXException {
@@ -87,6 +115,8 @@ public class ParserMainHandler implements ContentHandler {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 
 	
