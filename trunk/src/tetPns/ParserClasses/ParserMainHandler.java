@@ -1,11 +1,14 @@
 package tetPns.ParserClasses;
 
+import java.util.Vector;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import tetPns.Arc;
+import tetPns.PetriNet;
 import tetPns.Place;
 import tetPns.Transition;
 
@@ -16,9 +19,7 @@ import tetPns.Transition;
  */
 
 public class ParserMainHandler implements ContentHandler {
-	public ParserMainHandler() {
-		super();	
-	}
+	
 	
 	int placeCount, transitionCount, arcCount; 
 	boolean inPlace, inToken, inArc, inTransition, inInitialMarking;
@@ -26,6 +27,14 @@ public class ParserMainHandler implements ContentHandler {
 	private Transition lastTrans;
 	private Arc lastArc;
 	
+	private PetriNet pNet;
+	
+	
+	public ParserMainHandler() {
+		
+	}
+	
+
 	
 	public void startDocument() throws SAXException{
 		this.placeCount = 0;
@@ -35,6 +44,7 @@ public class ParserMainHandler implements ContentHandler {
 		this.lastArc = null;
 		this.lastTrans = null;
 		this.inPlace = this.inToken = this.inArc = this.inTransition = this.inInitialMarking = false;
+		pNet = new PetriNet();
 	}	
 	
 	public void startElement (String uri, String name,
@@ -44,61 +54,49 @@ public class ParserMainHandler implements ContentHandler {
 			this.inPlace = true;
 			this.placeCount++;
 			this.lastPlace = new Place();
-			int length = atts.getLength();
-			for (int i=0; i<length; i++) {
-				String nameAtt = atts.getQName(i);
-				if(nameAtt.equals("id")) this.lastPlace.setId(atts.getValue(i));
-			}
+			this.lastPlace.setId(atts.getValue("id"));
+			
 		}
 		else if(qName.equals("transition")) {
 			this.transitionCount++;
 			this.inTransition = true;
 			this.lastTrans = new Transition(0);
-			int length = atts.getLength();
-			for (int i=0; i<length; i++) {
-				String nameAtt = atts.getQName(i);
-				if(nameAtt.equals("id")) this.lastTrans.setId(atts.getValue(i));
-			}		
+			this.lastTrans.setId(atts.getValue("id"));
+			
 		}
 		else if(qName.equals("arc")) {
 			this.arcCount++;
 			this.lastArc = new Arc();
-			int length = atts.getLength();
-			for (int i=0; i<length; i++) {
-				String nameAtt = atts.getQName(i);
-				if(nameAtt.equals("id")) this.lastArc.setId(atts.getValue(i));
-				else if(nameAtt.equals("source")); //devo settare elemento di inizio
-				else if(nameAtt.equals("target")); //devo settare elemento fine
-			}					
+			this.lastArc.setId(atts.getValue("id"));
+			this.lastArc.setSourceElement(pNet.getElementById(atts.getValue("source")));
+			this.lastArc.setTargetElement(pNet.getElementById(atts.getValue("target")));
 		}
 		else if(qName.equals("initialMarking") && this.inPlace) this.inInitialMarking = true;
 		else if(qName.equals("text") && this.inPlace && this.inInitialMarking) this.inToken=true;
-
-//		
-//		int length = atts.getLength();
-//		for (int i=0; i<length; i++) {
-//			String nameAtt = atts.getQName(i);
-//
-//			String value = atts.getValue(i);
-//			//System.out.println("Attributes: " + nameAtt + " value : " + value);
-//			
-//		}
-		
+	
 
 	}
 
 	public void endElement (String uri, String name, String qName) {
 		if(qName.equals("place") && this.inPlace) {
-			this.lastPlace.getInfo();
+			//this.lastPlace.getInfo();
+			pNet.addPlace(this.lastPlace);
 			this.lastPlace = null;
 			this.inPlace = false;
 		}
 		else if(qName.equals("transition")) {
-			this.lastTrans.getInfo();
+			//this.lastTrans.getInfo();
+			pNet.addTransition(this.lastTrans);
 			this.lastTrans = null;
 			this.inTransition = false;
 			
 		}
+		else if(qName.equals("arc")) {
+			pNet.addArc(this.lastArc);
+			this.lastArc = null;
+			//this.lastArc.getInfo();
+		}
+		
 		else if(qName.equals("text") && this.inPlace && this.inToken) {
 			this.inToken = false;
 		}
@@ -116,9 +114,7 @@ public class ParserMainHandler implements ContentHandler {
 	}
 
 	public void endDocument() throws SAXException {
-		System.out.println("Places " + this.placeCount);
-		System.out.println("Transitions " +this.transitionCount);
-		System.out.println("Arcs " + this.arcCount);
+		pNet.getInfo();
 	}
 
 	public void endPrefixMapping(String prefix) throws SAXException {
@@ -149,9 +145,5 @@ public class ParserMainHandler implements ContentHandler {
 	public void startPrefixMapping(String prefix, String uri) throws SAXException {
 		// TODO Auto-generated method stub
 	}
-
-
-
-
 	
 }
