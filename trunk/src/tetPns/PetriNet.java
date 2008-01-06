@@ -37,7 +37,7 @@ public class PetriNet {
 	 * @param id
 	 * @return
 	 */
-	public Object getElementById(String id) {
+	public Element getElementById(String id) {
 		for(Place place : places) {
 			if(place.getId().equals(id)) return place;
 		}

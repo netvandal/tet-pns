@@ -1,15 +1,9 @@
 package tetPns.ParserClasses;
 
-import java.util.Vector;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
-import tetPns.Arc;
-import tetPns.Place;
-import tetPns.Transition;
-
 
 /**
  * This is the main class that parse a pnml for building a Petri Net Model
