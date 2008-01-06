@@ -1,8 +1,14 @@
 package tetPns.ParserClasses;
 
+import java.util.Vector;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import tetPns.Arc;
+import tetPns.Place;
+import tetPns.Transition;
 
 
 /**
@@ -11,6 +17,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  */
 public class Parser {
+		
 	public Parser() {
 		XMLReader parser;
 	    try {
@@ -28,4 +35,5 @@ public class Parser {
 	    	System.err.println(e.toString());
 	    }
 	}
+	
 }

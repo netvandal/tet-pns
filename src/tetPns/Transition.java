@@ -45,4 +45,8 @@ public class Transition  extends Element {
 	public void getInfo() {
 		System.out.println("Transizione " + this.transId);
 	}
+
+	public String getId() {
+		return this.transId;
+	}
 }
