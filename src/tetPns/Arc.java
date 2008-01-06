@@ -6,8 +6,8 @@ package tetPns;
  *
  */
 public class Arc {
-	private Object sourceElement;
-	private Object targetElement;
+	private Element sourceElement;
+	private Element targetElement;
 	String arcId;
 	
 	public	Arc () {
@@ -16,11 +16,11 @@ public class Arc {
 		this.arcId = null;
 	}
 	
-	public void setSourceElement(Object start) {
+	public void setSourceElement(Element start) {
 		this.sourceElement = start;
 	}
 	
-	public void setTargetElement(Object end) {
+	public void setTargetElement(Element end) {
 		this.targetElement = end;
 	}	
 	
@@ -34,18 +34,9 @@ public class Arc {
 	
 	public void getInfo() {
 		String sourceId, targetId;
-		sourceId = targetId = null;
-		
-		// FIXME da rivedere se c'è un metodo + fico
-		Class c = this.sourceElement.getClass();
-		String cName = c.getName();
-		if(cName.equals("tetPns.Place")) sourceId = ((Place)sourceElement).getId();
-		if(cName.equals("tetPns.Transition")) sourceId = ((Transition)sourceElement).getId();
-		
-		c = this.targetElement.getClass();
-		cName = c.getName();
-		if(cName.equals("tetPns.Place")) targetId = ((Place)targetElement).getId();
-		if(cName.equals("tetPns.Transition")) targetId = ((Transition)targetElement).getId();
-		System.out.println("Arco " + this.arcId + " Source " + sourceId + " Target " + targetId);
+	
+		sourceId = sourceElement.getId();
+		targetId = targetElement.getId();
+		System.out.println("Arco " + arcId + " Source " + sourceId + " Target " + targetId);
 	}
 }
