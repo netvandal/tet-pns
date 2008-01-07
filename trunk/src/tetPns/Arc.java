@@ -5,9 +5,14 @@ package tetPns;
  * @author Michele Tameni, Alessio Troiano
  *
  */
-public class Arc {
+
+
+public class Arc extends Element{
+	final static int WEIGHT =1;
+	
 	private Element sourceElement;
 	private Element targetElement;
+	private int weight = WEIGHT;
 	String arcId;
 	
 	public	Arc () {
@@ -28,8 +33,20 @@ public class Arc {
 		this.arcId = id;
 	}
 	
+	public Element getSourceElement(){
+		return this.sourceElement;
+	}
+	
+	public Element getTargetElement(){
+		return this.targetElement;
+	}
+	
 	public String getId() {
 		return this.arcId;
+	}
+	
+	public int getWeight(){
+		return weight;
 	}
 	
 	public void getInfo() {
@@ -37,6 +54,6 @@ public class Arc {
 	
 		sourceId = sourceElement.getId();
 		targetId = targetElement.getId();
-		System.out.println("Arco " + arcId + " Source " + sourceId + " Target " + targetId);
+		System.out.println("Arco " + arcId + " Source " + sourceId + " Target " + targetId + "\n");
 	}
 }
