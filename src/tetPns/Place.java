@@ -8,7 +8,7 @@ package tetPns;
 
 public class Place extends Element {
 	
-	private int tokenQuantity = 0;
+	private int token = 0;
 	private String placeId;
 	
 	public Place() {
@@ -16,11 +16,18 @@ public class Place extends Element {
 	}
 
 	public void addToken(int n) {
-		this.tokenQuantity +=n;
+		this.token +=n;
+	}
+	
+	public void subToken(int n){
+		this.token -=n;
+	}
+	
+	public int getToken(){
+		return this.token;
 	}
 
 	public void setId(String value) {
-		// TODO Auto-generated method stub
 		this.placeId = value;
 	}
 	
@@ -29,7 +36,7 @@ public class Place extends Element {
 	}
 	
 	public void getInfo() {
-		System.out.println("Creato place " + this.placeId + " con " + this.tokenQuantity + " Token");		
+		System.out.println("Place " + this.placeId + " con " + this.token + " Token\n");		
 	}
 	
 	
