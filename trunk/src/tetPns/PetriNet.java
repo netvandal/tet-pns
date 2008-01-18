@@ -89,9 +89,7 @@ public class PetriNet {
 		Transition t;
 		int priority;
 		
-		enabled = getEnabledTransitions();
-		
-		if(enabled != null){
+		if((enabled = getEnabledTransitions()) != null){
 			t = enabled.firstElement();
 			v.addElement(t);
 			priority = t.getPriority();
@@ -99,8 +97,9 @@ public class PetriNet {
 				t = enabled.get(i);
 				if(t.getPriority() == priority)
 					v.addElement(t);
+				else
+					return v;
 			}
-			return v;
 		}
 		return enabled;
 	}
@@ -146,7 +145,7 @@ public class PetriNet {
 	}
 	
 	public void setPriorities(){
-		transitions.get(0).setPriority(3);
+		transitions.get(0).setPriority(0);
 		transitions.get(1).setPriority(0);
 	}
 	
