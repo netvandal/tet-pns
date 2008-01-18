@@ -146,7 +146,7 @@ public class PetriNet {
 	}
 	
 	public void setPriorities(){
-		transitions.get(0).setPriority(0);
+		transitions.get(0).setPriority(3);
 		transitions.get(1).setPriority(0);
 	}
 	
