@@ -25,14 +25,14 @@
       </initialMarking>
       <graphics><position x="250" y="150" /></graphics>
     </place>
-    <transition id="t1">
+    <transition id="t1" priority="0">
       <name>
         <graphics><offset x="0" y="26" /></graphics>
         <text>t1</text>
       </name>
       <graphics><position x="150" y="50" /></graphics>
     </transition>
-    <transition id="t2">
+    <transition id="t2" priority="0">
       <name>
         <graphics><offset x="-1" y="22" /></graphics>
         <text>t2</text>

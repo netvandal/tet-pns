@@ -59,6 +59,7 @@ public class ParserMainHandler implements ContentHandler {
 			this.inTransition = true;
 			this.lastTrans = new Transition(0);
 			this.lastTrans.setId(atts.getValue("id"));
+			this.lastTrans.setPriority(Integer.parseInt(atts.getValue("priority")));
 			
 		}
 		else if(qName.equals("arc")) {

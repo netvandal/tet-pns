@@ -33,7 +33,6 @@ public class Simulator {
 		myParser = new Parser();
 		pn = myParser.parsePetriNet("test.xml");
 		pn.createLinks();
-		pn.setPriorities(); //Metodo solo per debug. Da eliminare.
 		pn.orderTransitionsByPriority();	
 		pn.getInfo();
 	}
