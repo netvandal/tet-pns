@@ -9,7 +9,7 @@ import parser.Parser;
 
 /**
  * Simulator is the main class that manage all the simulation
- * of a PetriNet
+ * of a Petri Net
  * @author Michele Tameni, Alessio Troiano
  */
 
