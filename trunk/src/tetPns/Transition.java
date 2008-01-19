@@ -21,6 +21,7 @@ public class Transition  extends Element {
 	 */
 	public Transition(int p) {
 		this.transId = null;
+		this.priority = p;
 		arcIn = new Vector<Arc>();
 		arcOut = new Vector<Arc>();
 	}
