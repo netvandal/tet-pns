@@ -14,14 +14,13 @@ import tetPns.Transition;
 /**
  * The main handler for the pnml parser
  * @author michele
- *
  */
 
 public class ParserMainHandler implements ContentHandler {
 	
 	
 	int placeCount, transitionCount, arcCount; 
-	boolean inPlace, inToken, inArc, inTransition, inInitialMarking;
+	boolean inPlace, inToken, inInitialMarking;
 	private Place lastPlace;
 	private Transition lastTrans;
 	private Arc lastArc;
@@ -40,7 +39,7 @@ public class ParserMainHandler implements ContentHandler {
 		this.lastPlace = null;
 		this.lastArc = null;
 		this.lastTrans = null;
-		this.inPlace = this.inToken = this.inArc = this.inTransition = this.inInitialMarking = false;
+		this.inPlace = this.inToken = this.inInitialMarking = false;
 		pNet = new PetriNet();
 	}	
 	
@@ -56,10 +55,8 @@ public class ParserMainHandler implements ContentHandler {
 		}
 		else if(qName.equals("transition")) {
 			this.transitionCount++;
-			this.inTransition = true;
-			this.lastTrans = new Transition(0);
+			this.lastTrans = new Transition(Integer.parseInt(atts.getValue("priority")));
 			this.lastTrans.setId(atts.getValue("id"));
-			this.lastTrans.setPriority(Integer.parseInt(atts.getValue("priority")));
 			
 		}
 		else if(qName.equals("arc")) {
@@ -85,9 +82,7 @@ public class ParserMainHandler implements ContentHandler {
 		else if(qName.equals("transition")) {
 			//this.lastTrans.getInfo();
 			pNet.addTransition(this.lastTrans);
-			this.lastTrans = null;
-			this.inTransition = false;
-			
+			this.lastTrans = null;			
 		}
 		else if(qName.equals("arc")) {
 			pNet.addArc(this.lastArc);
