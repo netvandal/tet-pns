@@ -93,7 +93,7 @@ public class PetriNet {
 			t = enabled.firstElement();
 			v.addElement(t);
 			priority = t.getPriority();
-			for(int i=1; i<enabled.size(); i++){
+			for(int i=1; i<enabled.size(); i++){ //Se enabled è di un solo elemento?!?!?!?!?!
 				t = enabled.get(i);
 				if(t.getPriority() == priority)
 					v.addElement(t);
