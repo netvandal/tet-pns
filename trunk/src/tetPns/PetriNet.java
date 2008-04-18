@@ -20,6 +20,7 @@ public class PetriNet {
 	
 	public void addArc(Arc a){
 		arcs.addElement(a);
+		this.createLinks(a);
 	}
 	
 	public void addPlace(Place p){
@@ -28,6 +29,7 @@ public class PetriNet {
 	
 	public void addTransition(Transition t){
 		transitions.addElement(t);
+		this.orderTransitionsByPriority();
 	}
 	
 	/**
@@ -35,21 +37,22 @@ public class PetriNet {
 	 * 
 	 * P.S. Sono fico anch'io!!!
 	 */
-	public void createLinks(){
+	public void createLinks(Arc a){
 		Transition t= null;
-		for(Arc a : arcs){
-			if(a.getSourceElement() instanceof Transition){
-				t=(Transition) a.getSourceElement();
-				t.addArcOut(a);
-			}
-			if(a.getTargetElement() instanceof Transition){
-				t=(Transition) a.getTargetElement();
-				t.addArcIn(a);
-			}
+
+		if(a.getSourceElement() instanceof Transition){
+			t=(Transition) a.getSourceElement();
+			t.addArcOut(a);
 		}
+		if(a.getTargetElement() instanceof Transition){
+			t=(Transition) a.getTargetElement();
+			t.addArcIn(a);
+		}
+		
 	}
 	
 	//FIXME Metodo per riordinare le transizioni
+	// TODO refactor per inserimento ordinato e buoannotte a tutti
 	public void orderTransitionsByPriority(){
 		Transition ti,tj,temp;
 		
