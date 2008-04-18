@@ -32,9 +32,7 @@ public class Simulator {
 	private void initSimulation() {
 		myParser = new Parser();
 		pn = myParser.parsePetriNet("test.xml");
-		pn.createLinks();
-		pn.orderTransitionsByPriority();	
-		pn.getInfo();
+
 	}
 	
 	private void manageSimulation() throws IOException{

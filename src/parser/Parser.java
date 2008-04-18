@@ -37,8 +37,9 @@ public class Parser {
 		catch(Exception e){
 			System.err.println(e.toString());
 		}
-		
+
 		return pmh.getPetriNet();
+
 	}
 	
 }
