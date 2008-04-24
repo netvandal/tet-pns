@@ -3,6 +3,7 @@
  */
 package tetServer;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import tetPns.PetriNet;
@@ -11,14 +12,19 @@ import tetPns.PetriNet;
  * @author michele
  *
  */
-public class Dispenser implements IDispenser {
+public class Dispenser implements IDispenser, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/* (non-Javadoc)
 	 * @see tetServer.IDispenser#getNet(java.lang.String)
 	 */
-	public PetriNet getNet(String nome) throws RemoteException {
+	public String /*PetriNet*/ getNet(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
-		return null;
+		return nome;
 	}
 
 	/* (non-Javadoc)

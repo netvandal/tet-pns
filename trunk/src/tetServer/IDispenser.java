@@ -19,7 +19,7 @@ public interface IDispenser extends Remote {
 	
 	public boolean sendNet(String name) 	    throws RemoteException;
 
-	public PetriNet getNet(String nome) 	    throws RemoteException;
+	public String /*PetriNet*/ getNet(String nome) 	    throws RemoteException;
 
 	
 }
