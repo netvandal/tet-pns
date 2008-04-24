@@ -40,8 +40,8 @@ public class TetServer extends UnicastRemoteObject{
 			//Naming.rebind("DISPENSER", disp);
 		
 			Registry r = LocateRegistry.getRegistry();
-			r.bind("SIMULATOR", sim);
-			r.bind("DISPENSER", disp);
+			r.rebind("SIMULATOR", sim);
+			r.rebind("DISPENSER", disp);
 		}
 		/* If any communication failures occur... */
 		catch (RemoteException e) {
