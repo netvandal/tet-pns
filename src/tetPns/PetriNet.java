@@ -100,11 +100,11 @@ public class PetriNet {
 				t = enabled.get(i);
 				if(t.getPriority() == priority)
 					v.addElement(t);
-				else
-					return v;
+				else break;
 			}
+			return v;
 		}
-		return enabled;
+		return null;
 	}
 	
 	//FIXME In verità deve scattare in base all'id della transizione.

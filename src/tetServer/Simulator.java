@@ -3,6 +3,7 @@
  */
 package tetServer;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Vector;
 
@@ -13,7 +14,12 @@ import tetPns.Transition;
  * @author michele
  *
  */
-public class Simulator implements ISimulator {
+public class Simulator implements ISimulator, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/* (non-Javadoc)
 	 * @see tetServer.ISimulator#getTransiction()
