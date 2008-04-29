@@ -15,16 +15,18 @@ import tetPns.Transition;
  *
  */
 public interface ISimulator extends Remote {
+	
 
 	public boolean setNet(PetriNet net)	    throws RemoteException;
-
 	
-	public Vector<Transition> getTransiction()	    throws RemoteException;
-
 	
-	public PetriNet nextStep(Transition t)	    throws RemoteException;
+	public boolean nextStep(String transId)	    throws RemoteException;
 
 	
 	public boolean stopSimulation()	    throws RemoteException;
+	
 
+	public Vector<Transition> getSelectableTransition() throws RemoteException;
+	
+	public PetriNet getNet() throws RemoteException;
 }

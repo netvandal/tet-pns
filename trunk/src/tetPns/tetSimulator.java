@@ -8,19 +8,19 @@ import java.util.Vector;
 import parser.Parser;
 
 /**
- * Simulator is the main class that manage all the simulation
+ * tetSimulator is the main class that manage all the simulation
  * of a Petri Net
  * @author Michele Tameni, Alessio Troiano
  */
 
 
-public class Simulator {
+public class tetSimulator {
 
 	PetriNet pn;
 	Parser myParser;
 	
 	public static void main(String[] args) throws IOException {
-		Simulator sim =new Simulator();
+		tetSimulator sim =new tetSimulator();
 		sim.initSimulation();
 		sim.manageSimulation();
 	}

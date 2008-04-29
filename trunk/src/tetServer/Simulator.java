@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import tetPns.PetriNet;
 import tetPns.Transition;
+import tetPns.tetSimulator;
 
 /**
  * @author michele
@@ -16,41 +17,52 @@ import tetPns.Transition;
  */
 public class Simulator implements ISimulator, Serializable {
 
-	/**
-	 * 
-	 */
+	PetriNet myNet = null;
+	tetSimulator mySimulator = null;
+	Vector<Transition> enabledTransition;
+	
+	public Simulator() {
+		mySimulator = new tetSimulator();
+	}
+		
 	private static final long serialVersionUID = 1L;
 
-	/* (non-Javadoc)
-	 * @see tetServer.ISimulator#getTransiction()
-	 */
-	public Vector<Transition> getTransiction() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<Transition> getSelectableTransition() {
+		if(myNet!=null) {
+			enabledTransition = myNet.getEnabledTransitionsWithHighestPriority();		
+			return enabledTransition;
+		} else return null; // non è stata settata nessuna rete di petri.		
 	}
 
-	/* (non-Javadoc)
-	 * @see tetServer.ISimulator#nextStep(tetPns.Transition)
+	/* 
+	 * fa scattare la transizione selezionata
 	 */
-	public PetriNet nextStep(Transition t) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean nextStep(String transId) {
+		if(myNet!=null) return myNet.fireTransition(transId);
+		else return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see tetServer.ISimulator#setNet(tetPns.PetriNet)
+	
+	public PetriNet getNet() {
+		return myNet;
+	}
+	
+	/*
+	 *  Setta la rete di petri di cui effettuare la
+	 * simulazione. 
 	 */
 	public boolean setNet(PetriNet net) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+		myNet = net;
+		return true;
+		
+		// TODO verificare se è riusciuto il settaggio, in caso contrario ritorno false.
 	}
 
-	/* (non-Javadoc)
-	 * @see tetServer.ISimulator#stopSimulation()
-	 */
+
 	public boolean stopSimulation() throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+		myNet = null;
+		enabledTransition = null;
+		return true;
 	}
 
 }
