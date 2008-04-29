@@ -13,7 +13,8 @@ public class Transition  extends Element{
 	private String transId;
 	private Vector<Arc> arcIn;
 	private Vector<Arc> arcOut;
-	
+	private int myX = 0;
+	private int myY = 0;	
 	
 	/**
 	 * Constructor
@@ -94,4 +95,22 @@ public class Transition  extends Element{
 	public String getId() {
 		return this.transId;
 	}
+
+
+	public void setCoordX (int x) {
+		myX = x;
+	}
+	
+	public void setCoordY(int y) {
+		myY = y;
+	}
+	
+	public int getXCoord () {
+		return myX;
+	}
+	
+	public int getYCoord () {
+		return myY;
+	}
+
 }

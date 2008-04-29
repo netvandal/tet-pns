@@ -135,6 +135,18 @@ public class PetriNet implements Serializable{
 	}
 	
 
+	public Vector<Place> getPlaces() {
+		return places;
+	}
+
+	public Vector<Transition> getTransitions() {
+		return transitions;
+	}
+	
+	public Vector<Arc> getArcs() {
+		return arcs;
+	}
+	
 	public void getInfo() {
 		for(Place place : places) {
 			place.getInfo();
