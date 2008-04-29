@@ -14,9 +14,10 @@ public class TetClient {
 		
 		try {
             Registry reg = LocateRegistry.getRegistry();
-            
+            //Thread.sleep(10000);
             IDispenser d = (IDispenser) reg.lookup("DISPENSER");
-            System.out.println(d.getNet("qpworiqoiweuqo Ciao"));
+            //Thread.sleep(7000);
+            System.out.println(d.getNet("Ciao"));
             
         } catch (Exception e) {
             // Something wrong here

@@ -22,9 +22,9 @@ public class Dispenser implements IDispenser, Serializable {
 	/* (non-Javadoc)
 	 * @see tetServer.IDispenser#getNet(java.lang.String)
 	 */
-	public String /*PetriNet*/ getNet(String nome) throws RemoteException {
+	public PetriNet getNet(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
-		return nome;
+		return null;
 	}
 
 	/* (non-Javadoc)
