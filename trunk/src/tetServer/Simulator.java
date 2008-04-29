@@ -9,7 +9,6 @@ import java.util.Vector;
 
 import tetPns.PetriNet;
 import tetPns.Transition;
-import tetPns.tetSimulator;
 
 /**
  * @author michele
