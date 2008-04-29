@@ -7,7 +7,7 @@ import java.util.Vector;
  * @author Michele Tameni, Alessio Troiano
  *
  */
-public class Transition  extends Element {
+public class Transition  extends Element{
 	
 	private int priority = 0;
 	private String transId;
