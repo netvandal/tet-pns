@@ -17,15 +17,13 @@ import tetPns.Transition;
 public class Simulator implements ISimulator, Serializable {
 
 	PetriNet myNet = null;
-	Vector<Transition> enabledTransition;
 
 	private static final long serialVersionUID = 1L;
 
 	public Vector<Transition> getSelectableTransition() {
 		if(myNet!=null) {
-			enabledTransition = myNet.getEnabledTransitionsWithHighestPriority();		
-			return enabledTransition;
-		} else return null; // non è stata settata nessuna rete di petri.		
+			return myNet.getEnabledTransitionsWithHighestPriority();		
+		} else return null; // non stata settata nessuna rete di petri.		
 	}
 
 	/* 
@@ -49,13 +47,12 @@ public class Simulator implements ISimulator, Serializable {
 		myNet = net;
 		return true;
 		
-		// TODO verificare se è riusciuto il settaggio, in caso contrario ritorno false.
+		// TODO verificare se riusciuto il settaggio, in caso contrario ritorno false.
 	}
 
 
 	public boolean stopSimulation() throws RemoteException {
 		myNet = null;
-		enabledTransition = null;
 		return true;
 	}
 

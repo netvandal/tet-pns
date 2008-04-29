@@ -1,12 +1,13 @@
 package tetPns;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  * This is the main class that enclose all the Petri net elements
  * @author Michele Tameni, Alessio Troiano
  */
-public class PetriNet {
+public class PetriNet implements Serializable{
 	
 	private Vector<Arc> arcs;
 	private Vector<Place> places;

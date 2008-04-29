@@ -14,10 +14,10 @@ import tetPns.PetriNet;
  */
 public interface IDispenser extends Remote {
 
-	public String list()	    throws RemoteException;
+	public String[] list()	    throws RemoteException;
 
 	
-	public boolean sendNet(String name) 	    throws RemoteException;
+	public boolean sendNet(PetriNet pn, String name) 	    throws RemoteException;
 
 	public PetriNet getNet(String nome) 	    throws RemoteException;
 
