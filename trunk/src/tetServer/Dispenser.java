@@ -5,10 +5,10 @@ package tetServer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -21,8 +21,10 @@ import tetPns.PetriNet;
  */
 public class Dispenser implements IDispenser, Serializable {
 
-	final static private String EXT = ".tetpns";
-	final static private String REPOSITORY = "repository";
+	private static final String EXT = ".tetpns";
+	private static final String REPOSITORY = "repository";
+	
+	private static final long serialVersionUID = 1L;
 	
 	private File repository;
 	private String [] a;
@@ -31,19 +33,27 @@ public class Dispenser implements IDispenser, Serializable {
 		repository = new File(REPOSITORY);
 		if(!repository.exists())
 			repository.mkdir();
+		
 	}
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
+		
 	/**
 	 * Restituisce la rete di Petri voluta dal client
 	 */
 	public PetriNet getNet(String nome) throws RemoteException {
-		// TODO Auto-generated method stub
+		
+		File [] fileInRepository = repository.listFiles();
+		try{
+			for(File f : fileInRepository){
+				if(f.getName().equalsIgnoreCase(nome)){
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+				return (PetriNet) ois.readObject();
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println("File error: " + e.toString());
+		}
 		return null;
 	}
 
@@ -53,7 +63,7 @@ public class Dispenser implements IDispenser, Serializable {
 	 * presenti nell'archivio
 	 */
 	public String[] list() throws RemoteException {
-		repository = new File(REPOSITORY);
+		//repository = new File(REPOSITORY);
 	
 		return repository.list();
 	}
@@ -61,8 +71,6 @@ public class Dispenser implements IDispenser, Serializable {
 	
 	/**
 	 * Salva la rete di Petri come oggetto serializzato nell'archivio
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public boolean sendNet(PetriNet pn, String name) throws RemoteException {
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -81,12 +89,12 @@ public class Dispenser implements IDispenser, Serializable {
 			
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f1));
 			oos.writeObject(pn);
+			return true;
 		}
 		catch(Exception e){
 			System.out.println("File error: " + e.toString());
+			return false;
 		}
-		
-		return false;
 	}
 
 }
