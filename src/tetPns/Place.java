@@ -10,6 +10,9 @@ public class Place extends Element {
 	
 	private int token = 0;
 	private String placeId;
+	private int myX = 0;
+	private int myY = 0;
+	
 	
 	public Place() {
 		
@@ -36,8 +39,23 @@ public class Place extends Element {
 	}
 	
 	public void getInfo() {
-		System.out.println("Place " + this.placeId + " con " + this.token + " Token\n");		
+		System.out.println("Place " + this.placeId + " con " + this.token + " Token ; x,y = " + this.myX + "," + myY + "\n");		
 	}
 	
+	public void setCoordX (int x) {
+		myX = x;
+	}
+	
+	public void setCoordY(int y) {
+		myY = y;
+	}
+	
+	public int getXCoord () {
+		return myX;
+	}
+	
+	public int getYCoord () {
+		return myY;
+	}
 	
 }

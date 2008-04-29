@@ -20,7 +20,7 @@ public class ParserMainHandler implements ContentHandler {
 	
 	
 	int placeCount, transitionCount, arcCount; 
-	boolean inPlace, inToken, inInitialMarking;
+	boolean inPlace, inToken, inInitialMarking, inPosPlace, inPosPlaceY, inPosPlaceX;
 	private Place lastPlace;
 	private Transition lastTrans;
 	private Arc lastArc;
@@ -68,7 +68,21 @@ public class ParserMainHandler implements ContentHandler {
 		}
 		else if(qName.equals("initialMarking") && this.inPlace) this.inInitialMarking = true;
 		else if(qName.equals("text") && this.inPlace && this.inInitialMarking) this.inToken=true;
-	
+		//  FIXME controllare se position esiste solo sotto a graphic
+		else if(qName.equals("position")) {
+			if(this.inPlace) {
+				this.inPosPlace = true;
+			
+				if(this.lastPlace != null && this.inPlace && this.inPosPlace)  { //parsing posizione place 
+					this.lastPlace.setCoordX(Integer.parseInt(atts.getValue("x")));
+					this.lastPlace.setCoordY(Integer.parseInt(atts.getValue("y")));
+				}	
+			} else if(this.lastTrans != null) {
+				this.lastTrans.setCoordX(Integer.parseInt(atts.getValue("x")));
+				this.lastTrans.setCoordY(Integer.parseInt(atts.getValue("y")));
+			}
+		}
+
 
 	}
 
@@ -96,12 +110,17 @@ public class ParserMainHandler implements ContentHandler {
 		else if(qName.equals("initialMarking")) {
 			this.inInitialMarking = false;
 		}
-		else if(qName.equals("text") && this.inToken) this.inToken = false;		
+		else if(qName.equals("text") && this.inToken) this.inToken = false;	
+		// FIXME verificare se position blhablha come di lˆ
+		else if(qName.equals("position") && this.inPosPlace) this.inPosPlace = false;
+
 	}
 
 	public void characters(char[] ch, int start, int len) {
+		System.out.println(this.inPosPlaceX);
+
 		String content = new String(ch,start,len);
-		if(this.lastPlace != null && this.inPlace && this.inInitialMarking && this.inToken)  {
+		if(this.lastPlace != null && this.inPlace && this.inInitialMarking && this.inToken)  { // parsing token
 			this.lastPlace.addToken(Integer.parseInt(content));
 		}
 	}
