@@ -107,12 +107,14 @@ public class PetriNet {
 		return null;
 	}
 	
-	//FIXME In verità deve scattare in base all'id della transizione.
-	public void fireTransition(String id){
+	public boolean fireTransition(String id){
 		for(Transition t : transitions){
-			if(t.getId().equals(id))
+			if(t.getId().equals(id)) {
 				t.fire();
+				return true;
+			} 
 		}
+		return false;
 	}
 
 	/**
