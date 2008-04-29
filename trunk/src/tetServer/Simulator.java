@@ -18,13 +18,8 @@ import tetPns.tetSimulator;
 public class Simulator implements ISimulator, Serializable {
 
 	PetriNet myNet = null;
-	tetSimulator mySimulator = null;
 	Vector<Transition> enabledTransition;
-	
-	public Simulator() {
-		mySimulator = new tetSimulator();
-	}
-		
+
 	private static final long serialVersionUID = 1L;
 
 	public Vector<Transition> getSelectableTransition() {
