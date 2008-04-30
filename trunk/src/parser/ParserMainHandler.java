@@ -72,8 +72,7 @@ public class ParserMainHandler implements ContentHandler {
 		else if(qName.equals("position")) {
 			if(this.inPlace) {
 				this.inPosPlace = true;
-			
-				if(this.lastPlace != null && this.inPlace && this.inPosPlace)  { //parsing posizione place 
+				if(this.lastPlace != null)  { //parsing posizione place 
 					this.lastPlace.setCoordX(Integer.parseInt(atts.getValue("x")));
 					this.lastPlace.setCoordY(Integer.parseInt(atts.getValue("y")));
 				}	

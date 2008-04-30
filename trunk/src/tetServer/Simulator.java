@@ -53,6 +53,7 @@ public class Simulator implements ISimulator, Serializable {
 
 	public boolean stopSimulation() throws RemoteException {
 		myNet = null;
+		System.gc();
 		return true;
 	}
 

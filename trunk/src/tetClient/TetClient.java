@@ -110,6 +110,16 @@ public class TetClient {
 		pn.getInfo();
 	}
 	
+	private void stopClient(){
+		try{
+			sim.stopSimulation();
+		}
+		catch(RemoteException e){
+			System.out.println("Problemi di connessione");
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		
 		
@@ -136,6 +146,8 @@ public class TetClient {
             if(input.readLine().equalsIgnoreCase("y")){
             	tc.saveNet();
             }
+            
+            tc.stopClient();
             
         } catch (Exception e) {
             // Something wrong here

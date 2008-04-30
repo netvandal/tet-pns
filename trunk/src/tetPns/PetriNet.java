@@ -105,7 +105,7 @@ public class PetriNet implements Serializable{
 			}
 			return v;
 		}
-		return null;
+		return null;//Non ci sono transizioni abilitate
 	}
 	
 	public boolean fireTransition(String id){
@@ -130,7 +130,6 @@ public class PetriNet implements Serializable{
 		for(Transition trans : transitions) {
 			if(trans.getId().equals(id)) return trans;
 		}
-		System.out.println("Not Match");
 		return null;
 	}
 	
