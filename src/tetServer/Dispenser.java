@@ -27,32 +27,36 @@ public class Dispenser implements IDispenser, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private File repository;
-	private String [] a;
 	
 	public Dispenser(){
 		repository = new File(REPOSITORY);
 		if(!repository.exists())
 			repository.mkdir();
-		
 	}
 	
 		
 	/**
 	 * Restituisce la rete di Petri voluta dal client
 	 */
-	public PetriNet getNet(String nome) throws RemoteException {
+	public PetriNet getNet(String name) throws RemoteException {
+		
+		if(!checkFileExtension(name)){
+			name = name + EXT;
+		}
 		
 		File [] fileInRepository = repository.listFiles();
 		try{
 			for(File f : fileInRepository){
-				if(f.getName().equalsIgnoreCase(nome)){
+				if(f.getName().equalsIgnoreCase(name)){
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 				return (PetriNet) ois.readObject();
 				}
+			return null; //Non esiste alcuna rete con quel nome
 			}
 		}
 		catch(Exception e){
 			System.out.println("File error: " + e.toString());
+			return null;
 		}
 		return null;
 	}
@@ -63,9 +67,15 @@ public class Dispenser implements IDispenser, Serializable {
 	 * presenti nell'archivio
 	 */
 	public String[] list() throws RemoteException {
-		//repository = new File(REPOSITORY);
-	
-		return repository.list();
+		
+		File[] fileInRepository = repository.listFiles();
+		String[] fileName = new String[fileInRepository.length];
+		
+		for(int i=0;i<fileName.length;i++){
+			fileName[i]=fileInRepository[i].getName();
+		}
+		
+		return fileName;
 	}
 
 	
@@ -75,7 +85,6 @@ public class Dispenser implements IDispenser, Serializable {
 	public boolean sendNet(PetriNet pn, String name) throws RemoteException {
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		try{
-			
 			File f1 = new File(REPOSITORY + File.separator + name + EXT);
 			
 			while(f1.exists()){
@@ -95,6 +104,16 @@ public class Dispenser implements IDispenser, Serializable {
 			System.out.println("File error: " + e.toString());
 			return false;
 		}
+	}
+	
+	/**
+	 * Controlla se fileName contiene l'estensione
+	 */
+	private boolean checkFileExtension(String fileName){
+		int lastPointIndex = fileName.lastIndexOf(".");
+		String fileExtension = fileName.substring(lastPointIndex);
+		
+		return fileExtension.equalsIgnoreCase(EXT);
 	}
 
 }

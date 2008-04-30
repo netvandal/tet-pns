@@ -6,8 +6,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Random;
-
 import parser.Parser;
 import tetPns.PetriNet;
 import tetPns.Place;
