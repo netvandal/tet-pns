@@ -7,6 +7,14 @@ import tetPns.PetriNet;
 import tetPns.Place;
 import tetPns.Transition;
 
+
+/**
+ * Validator si occupa di validare la rete di Petri
+ * appena immessa. Controlla alcune caratteristiche
+ * utili per una buona simulazione.
+ * 
+ * @author Alessio
+ */
 public class Validator {
 	public static boolean validate(PetriNet pn){
 		return (placeController(pn) && transitionController(pn) && arcController(pn) && netIdController(pn));
