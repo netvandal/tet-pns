@@ -38,8 +38,11 @@ public class Parser {
 			System.err.println(e.toString());
 		}
 
-		return pmh.getPetriNet();
-
+		//Se il file è valido viene ritornata la rete di Petri
+		if(Validator.validate(pmh.getPetriNet()))
+			return pmh.getPetriNet();
+		return null;
+			
 	}
 	
 }

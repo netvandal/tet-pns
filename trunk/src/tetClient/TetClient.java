@@ -45,29 +45,32 @@ public class TetClient {
 	
 	private void loadNet() throws IOException{
 		
-		System.out.println("Da dove vuoi caricare il file (1 - da casa/2 - da remoto): ");
 		
-		if(Integer.parseInt(input.readLine())==1){
-			System.out.println("Inserisci il nome del file: ");
-			File f = new File(input.readLine());
-			if(f.exists()){
-				Parser myParser = new Parser();
-				pn = myParser.parsePetriNet(f.getName());
+		do{
+			System.out.println("Da dove vuoi caricare il file (1 - da casa/2 - da remoto/): ");
+			switch(Integer.parseInt(input.readLine())){
+			case 1: System.out.println("Inserisci il nome del file: ");
+					File f = new File(input.readLine());
+					if(f.exists()){
+						Parser myParser = new Parser();
+						pn = myParser.parsePetriNet(f.getName());
+
+					} 
+					else {
+						System.out.println("Il file non esiste!!!");
+					}
+					break;
+			case 2: String [] file = disp.list();
+					for(String a : file){
+						System.out.println(a);
+					}
+					System.out.println("Scegli quale rete caricare:");
+					pn = disp.getNet(input.readLine());
+					break;
+			
+			default:break;
 			}
-			else{
-				System.out.println("Il file non esiste!!!");
-				System.exit(1);
-			}
-		}
-		else{
-			String [] file = disp.list();
-			for(String a : file){
-				System.out.println(a);
-			}
-			System.out.println("Scegli quale rete caricare:");
-			pn = disp.getNet(input.readLine());
-		}
-		
+		}while(pn==null);
 		sim.setNet(pn);
 		pn.getInfo();
 
@@ -127,8 +130,8 @@ public class TetClient {
 		
 		try {
             TetClient tc = new TetClient();
-    		
             tc.loadNet();
+            
             
             System.out.println("Inizio simulazione!!!");
             

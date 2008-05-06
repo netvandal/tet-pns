@@ -12,7 +12,8 @@ public class Place extends Element {
 	private String placeId;
 	private int myX = 0;
 	private int myY = 0;
-	
+	private int labelX=0;
+	private int labelY=0;
 	
 	public Place() {
 		
@@ -56,6 +57,22 @@ public class Place extends Element {
 	
 	public int getYCoord () {
 		return myY;
+	}
+	
+	public void setLabelX (int x) {
+		labelX = x;
+	}
+	
+	public void setLabelY(int y) {
+		labelY = y;
+	}
+	
+	public int getLabelX () {
+		return labelX;
+	}
+	
+	public int getLabelY () {
+		return labelY;
 	}
 	
 }

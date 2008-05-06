@@ -15,6 +15,8 @@ public class Transition  extends Element{
 	private Vector<Arc> arcOut;
 	private int myX = 0;
 	private int myY = 0;	
+	private int labelX=0;
+	private int labelY=0;
 	
 	/**
 	 * Constructor
@@ -112,5 +114,28 @@ public class Transition  extends Element{
 	public int getYCoord () {
 		return myY;
 	}
+	
+	public Vector<Arc> getArcIn(){
+		return arcIn;
+	}
 
+	public Vector<Arc> getArcOut(){
+		return arcOut;
+	}
+	
+	public void setLabelX (int x) {
+		labelX = x;
+	}
+	
+	public void setLabelY(int y) {
+		labelY = y;
+	}
+	
+	public int getLabelX () {
+		return labelX;
+	}
+	
+	public int getLabelY () {
+		return labelY;
+	}
 }
