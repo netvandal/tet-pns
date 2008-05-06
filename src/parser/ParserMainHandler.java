@@ -20,7 +20,7 @@ public class ParserMainHandler implements ContentHandler {
 	
 	
 	int placeCount, transitionCount, arcCount; 
-	boolean inPlace, inToken, inInitialMarking, inPosPlace, inPosPlaceY, inPosPlaceX;
+	boolean inPlace, inTrans, inToken, inInitialMarking, inPosPlace, inPosPlaceY, inPosPlaceX, inName;
 	private Place lastPlace;
 	private Transition lastTrans;
 	private Arc lastArc;
@@ -54,6 +54,7 @@ public class ParserMainHandler implements ContentHandler {
 			
 		}
 		else if(qName.equals("transition")) {
+			this.inTrans=true;
 			this.transitionCount++;
 			this.lastTrans = new Transition(Integer.parseInt(atts.getValue("priority")));
 			this.lastTrans.setId(atts.getValue("id"));
@@ -81,6 +82,18 @@ public class ParserMainHandler implements ContentHandler {
 				this.lastTrans.setCoordY(Integer.parseInt(atts.getValue("y")));
 			}
 		}
+		else if(qName.equals("name"))inName=true;
+		else if(inName && qName.equals("offset")){
+			if(inPlace){
+				this.lastPlace.setLabelX(Integer.parseInt(atts.getValue("x")));
+				this.lastPlace.setLabelY(Integer.parseInt(atts.getValue("y")));
+			}
+			else if(inTrans){
+				this.lastTrans.setLabelX(Integer.parseInt(atts.getValue("x")));
+				this.lastTrans.setLabelY(Integer.parseInt(atts.getValue("y")));
+			}
+		}
+		
 
 
 	}
@@ -94,6 +107,7 @@ public class ParserMainHandler implements ContentHandler {
 		}
 		else if(qName.equals("transition")) {
 			//this.lastTrans.getInfo();
+			this.inTrans=false;
 			pNet.addTransition(this.lastTrans);
 			this.lastTrans = null;			
 		}
@@ -112,6 +126,7 @@ public class ParserMainHandler implements ContentHandler {
 		else if(qName.equals("text") && this.inToken) this.inToken = false;	
 		// FIXME verificare se position blhablha come di lˆ
 		else if(qName.equals("position") && this.inPosPlace) this.inPosPlace = false;
+		else if(qName.equals("name"))inName=false;
 
 	}
 
