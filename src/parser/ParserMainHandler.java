@@ -131,7 +131,7 @@ public class ParserMainHandler implements ContentHandler {
 	}
 
 	public void characters(char[] ch, int start, int len) {
-		System.out.println(this.inPosPlaceX);
+		//System.out.println(this.inPosPlaceX);
 
 		String content = new String(ch,start,len);
 		if(this.lastPlace != null && this.inPlace && this.inInitialMarking && this.inToken)  { // parsing token

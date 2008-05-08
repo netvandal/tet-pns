@@ -81,14 +81,14 @@ public class Transition  extends Element{
 	}
 	
 	public void getInfo() {
-		System.out.println("Transizione " + this.transId);
+		System.out.println("Transizione: " + this.transId);
 		
-		System.out.println("Priorità " + this.priority);
+		System.out.println("Priorità: " + this.priority);
 		
-		System.out.println("Archi Ingresso");
+		System.out.println("Archi Ingresso:");
 		for(Arc a : arcIn)a.getInfo();
 		
-		System.out.println("Archi Uscita");
+		System.out.println("Archi Uscita:");
 		for(Arc a : arcOut)a.getInfo();
 		
 		System.out.println("\n");

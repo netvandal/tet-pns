@@ -15,24 +15,23 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class TetServer extends UnicastRemoteObject{
 
+
 	protected TetServer() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-
-	private static final long serialVersionUID = 1L;
-
 
 	public static void main(String[] args)  {
 		try {
 			
 			Dispenser disp = new Dispenser();
 			Simulator sim = new Simulator();
+			
 		
 			Registry r = LocateRegistry.getRegistry();
 			r.rebind("SIMULATOR", sim);
 			r.rebind("DISPENSER", disp);
+			
 		}
 		/* If any communication failures occur... */
 		catch (RemoteException e) {

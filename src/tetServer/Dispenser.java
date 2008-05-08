@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import tetPns.PetriNet;
 
@@ -21,10 +22,10 @@ import tetPns.PetriNet;
  */
 public class Dispenser implements IDispenser, Serializable {
 
+	private static final long serialVersionUID = -4799925758795034740L;
 	private static final String EXT = ".tetpns";
 	private static final String REPOSITORY = "repository";
 	
-	private static final long serialVersionUID = 1L;
 	
 	private File repository;
 	
@@ -48,17 +49,16 @@ public class Dispenser implements IDispenser, Serializable {
 		try{
 			for(File f : fileInRepository){
 				if(f.getName().equalsIgnoreCase(name)){
-				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-				return (PetriNet) ois.readObject();
+					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+					return (PetriNet) ois.readObject();
 				}
-			return null; //Non esiste alcuna rete con quel nome
 			}
+			return null; //Non esiste alcuna rete con quel nome
 		}
 		catch(Exception e){
 			System.out.println("File error: " + e.toString());
 			return null;
 		}
-		return null;
 	}
 
 	
@@ -69,13 +69,14 @@ public class Dispenser implements IDispenser, Serializable {
 	public String[] list() throws RemoteException {
 		
 		File[] fileInRepository = repository.listFiles();
-		String[] fileName = new String[fileInRepository.length];
-		
-		for(int i=0;i<fileName.length;i++){
-			fileName[i]=fileInRepository[i].getName();
+		Vector<String> fileName = new Vector<String>();
+		for(File f : fileInRepository){
+			if(!f.isDirectory()){
+				fileName.addElement(f.getName());
+			}
 		}
 		
-		return fileName;
+		return fileName.toArray(new String[fileName.size()]);
 	}
 
 	
@@ -110,8 +111,12 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Controlla se fileName contiene l'estensione
 	 */
 	private boolean checkFileExtension(String fileName){
+		String fileExtension;
 		int lastPointIndex = fileName.lastIndexOf(".");
-		String fileExtension = fileName.substring(lastPointIndex);
+		if(lastPointIndex==-1)
+			return false;
+			
+		fileExtension = fileName.substring(lastPointIndex);
 		
 		return fileExtension.equalsIgnoreCase(EXT);
 	}

@@ -8,6 +8,7 @@ package tetPns;
 
 
 public class Arc extends Element{
+
 	final static int WEIGHT =1;
 	
 	private Element sourceElement;

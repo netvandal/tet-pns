@@ -18,7 +18,6 @@ public class Simulator implements ISimulator, Serializable {
 
 	PetriNet myNet = null;
 
-	private static final long serialVersionUID = 1L;
 
 	public Vector<Transition> getSelectableTransition() {
 		if(myNet!=null) {
