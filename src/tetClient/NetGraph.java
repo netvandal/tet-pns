@@ -1,7 +1,10 @@
 package tetClient;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import edu.umd.cs.piccolox.swt.SWTGraphics2D;
+import java.awt.Polygon;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -28,7 +31,10 @@ public class NetGraph extends PCanvas {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	PLayer nodeLayer = getLayer();
+	PLayer edgeLayer = new PLayer();
+	PLayer labelLayer = new PLayer();
+	PLayer arrowLayer = new PLayer();
 	public NetGraph(int width, int height) {
 		setPreferredSize(new Dimension(width, height));
 		
@@ -42,10 +48,13 @@ public class NetGraph extends PCanvas {
 		
         // Initialize, and create a layer for the edges
         // (always underneath the nodes)
-		PLayer nodeLayer = getLayer();
-		PLayer edgeLayer = new PLayer();
+
 		getRoot().addChild(edgeLayer);
 		getCamera().addLayer(0, edgeLayer);
+		getRoot().addChild(labelLayer);
+		getCamera().addLayer(0,labelLayer);
+		getRoot().addChild(arrowLayer);
+		getCamera().addLayer(0,arrowLayer);
 		//Random random = new Random();
 
 		PPath node = null;
@@ -70,6 +79,11 @@ public class NetGraph extends PCanvas {
 			 			pbl.locateY() - (0.5 * text.getBounds().getHeight()));
 			 		text.setPickable(false);
 			
+			text = new PText(place.getId());
+			labelLayer.addChild(text);
+			
+	 		text.setOffset(place.getLabelX()+pbl.locateX(), place.getLabelY()+pbl.locateY());
+	 		text.setPickable(false);	
 			
 			nodeLayer.addChild(node);
 			totNode++;
@@ -78,12 +92,23 @@ public class NetGraph extends PCanvas {
 		// disegno tutte le transizioni
 		for(Transition transition : pn.getTransitions()) {
 			transition.getInfo();
-			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), 20, 20);
+			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), 30, 10);
 
 			node.addAttribute("edges", new ArrayList());
 			node.addAttribute("id", transition.getId());
 			node.addAttribute("type", "transition");
 			nodeLayer.addChild(node);
+			
+			
+			PNodeLocator pbl = new PNodeLocator(node);
+
+			
+			PText text = new PText(transition.getId());
+			labelLayer.addChild(text);
+			
+	 		text.setOffset(transition.getLabelX()+pbl.locateX(), transition.getLabelY()+pbl.locateY());
+	 		text.setPickable(false);	
+			
 			totNode++;
 		}
 		int i;
@@ -111,6 +136,8 @@ public class NetGraph extends PCanvas {
 				edge.addAttribute("nodes", new ArrayList());
 				((ArrayList)edge.getAttribute("nodes")).add(node1);
 				((ArrayList)edge.getAttribute("nodes")).add(node2);
+				
+				
 				edgeLayer.addChild(edge);
 				updateEdge(edge);			
 			}
@@ -140,7 +167,7 @@ public class NetGraph extends PCanvas {
 		}*/
 		
                 // Create event handler to move nodes and update edges
-		nodeLayer.addInputEventListener(new PDragEventHandler() {
+		/*nodeLayer.addInputEventListener(new PDragEventHandler() {
 			{
 				PInputEventFilter filter = new PInputEventFilter();
 				filter.setOrMask(InputEvent.BUTTON1_MASK | InputEvent.BUTTON3_MASK);
@@ -174,16 +201,13 @@ public class NetGraph extends PCanvas {
 					NetGraph.this.updateEdge((PPath) edges.get(i));
 				}
 			}
-		}); 
+		}); */
 	}
 	
 	
 	
 	
 	public void updateEdge(PPath edge) {
-		// Note that the node's "FullBounds" must be used (instead of just the "Bound") 
-		// because the nodes have non-identity transforms which must be included when
-		// determining their position.
 
 		PNode node1 = (PNode) ((ArrayList)edge.getAttribute("nodes")).get(0);
 		PNode node2 = (PNode) ((ArrayList)edge.getAttribute("nodes")).get(1);
@@ -192,5 +216,61 @@ public class NetGraph extends PCanvas {
 		edge.reset();
 		edge.moveTo((float)start.getX(), (float)start.getY());
 		edge.lineTo((float)end.getX(), (float)end.getY());
+		float x1 = (float)end.getX();
+		float y1 = (float)end.getY();
+		float x2 = (float)start.getX();
+		float y2 = (float)start.getY();
+		float m = (y2-y1)/(x2-x1);
+		float m2 = m+1;
+		float m3 = m-1;
+		this.drawArrow(arrowLayer, (int)x1, (int)y1, (int)x2, (int)y2, 2);
+		PPath node = new PPath();
+		//node.moveTo(x-2,y);
+		//node.lineTo(x+2, y+2);
+		//System.out.println("\nm="+angolo);
+		nodeLayer.addChild(node);
 	}
+	
+
+
+	
+	 public  void drawArrow(PLayer g2d, int xCenter, int yCenter, int x, int y, float stroke) {
+		  float mx[] = new float[5], my[] = new float[5];
+	      double aDir=Math.atan2(xCenter-x,yCenter-y);
+	      PPath p = null;
+	      p = PPath.createLine(x,y,xCenter,yCenter);
+	      int i1=12+(int)(stroke*2);
+	      int i2=6+(int)stroke;					
+	      System.out.println("direzione:"+ aDir);
+	      if(aDir>0 && y<yCenter) {
+	    	  x+=8;
+	    	  y+=8;
+	      } else if( aDir>0 && y>yCenter) {
+	    	  x+=8;
+	    	  y-=8;
+	      } if(aDir<0 && y>yCenter) {
+	    	  x-=7;
+	    	  y-=7;
+	      } else if( aDir<0 && y<yCenter) {
+	    	  x-=8;
+	    	  y+=8;
+	      }
+	      mx[0]=x;
+	      my[0]=y;
+	      mx[1]=x+xCor(i1,aDir+.5);
+	      my[1]=y+yCor(i1,aDir+.5);
+	      mx[2]=x+xCor(i2,aDir);
+	      my[2]=y+yCor(i2,aDir);
+	      
+	      mx[3]=x+xCor(i1,aDir-.5);
+	      my[3]=y+yCor(i1,aDir-.5);
+	      mx[4]=x;
+	      my[4]=y;
+	      p = PPath.createPolyline(mx,my);
+	      g2d.addChild(p);
+	   }
+	   private static int yCor(int len, double dir) {return (int)(len * Math.cos(dir));}
+	   private static int xCor(int len, double dir) {return (int)(len * Math.sin(dir));}
+	
+	
 }
