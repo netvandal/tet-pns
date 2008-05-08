@@ -1,9 +1,7 @@
 package tetClient;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
@@ -20,14 +18,19 @@ import tetServer.ISimulator;
 
 public class TetClient {
 	
+	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Esci"};
+	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorità","Esci"};
+	
+	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
 	private ISimulator sim;
 	private IDispenser disp;
 	private PetriNet pn;
 	
-	private static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-	
 	private TetClient() {
 		try{
+			loadNetMenu = new Menu("Caricamento Rete",LOAD_NET_OPTION);
+			pn=null;
+			
 			Registry reg = LocateRegistry.getRegistry();
 			sim = (ISimulator) reg.lookup("SIMULATOR");
 			disp = (IDispenser) reg.lookup("DISPENSER");
@@ -36,50 +39,52 @@ public class TetClient {
 			//Problemi di connessione
 			System.out.println("Problemi di connessione");
 			e.printStackTrace();
+			System.exit(1);
 		}
 		catch(NotBoundException e){
 			System.out.println("I nomi dei servizi non hanno un bind nel registro.");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
 	private void loadNet() throws IOException{
-		
-		
+		boolean continua=true;
 		do{
-			System.out.println("Da dove vuoi caricare il file (1 - da casa/2 - da remoto/): ");
-			switch(Integer.parseInt(input.readLine())){
-			case 1: System.out.println("Inserisci il nome del file: ");
-					File f = new File(input.readLine());
+			switch(loadNetMenu.scelta()){
+				case 1: File f = new File(Servizi.leggiStringa("Inserisci il nome del file: "));
 					if(f.exists()){
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
-
+						if(pn==null)
+							System.out.println("\t\tAttenzione!!! Il file non è valido.");
 					} 
 					else {
-						System.out.println("Il file non esiste!!!");
+						System.out.println("\t\tIl file non esiste!!!");
+					}break;
+				case 2: String[] file = disp.list();
+					if(file.length!=0){
+						repositoryMenu = new Menu("Repository",file);
+						pn = disp.getNet(file[repositoryMenu.scelta()-1]);
 					}
+					else
+						System.out.println("Non ci sono reti nel Repository");
 					break;
-			case 2: String [] file = disp.list();
-					for(String a : file){
-						System.out.println(a);
-					}
-					System.out.println("Scegli quale rete caricare:");
-					pn = disp.getNet(input.readLine());
-					break;
-			
-			default:break;
+				case 3:continua=false;break;
+					
+				default:System.out.println("Opzione non presente");break;
 			}
-		}while(pn==null);
-		sim.setNet(pn);
-		pn.getInfo();
-
+		}while(pn==null && continua);
+		
+		if(pn!=null){
+			pn.getInfo();
+			sim.setNet(pn);
+		}
 	}
 	
 	private void saveNet(){
 		try{
-			System.out.println("Inserisci il nome del file:");
-			disp.sendNet(pn, input.readLine());
+			disp.sendNet(pn, Servizi.leggiStringa("Inserisci il nome del file:"));
 		}
 		catch(Exception e){
 			System.out.println("Problemi in saveNet");
@@ -89,28 +94,61 @@ public class TetClient {
 	
 	private void oneStepBeyond(){
 		try{
-			Vector<Transition> q = sim.getSelectableTransition();
-			for(Transition t : q)
-				t.getInfo();
-		
-			System.out.println("\n\nCosa vuoi far scattare?");
-			String id = null;
+			Vector<Transition> trans = sim.getSelectableTransition();
+			if(trans==null){
+				System.out.println("\t\tDEADLOCK DEADLOCK DEADLOCK DEADLOCK" +
+						"\n\t\tNon ci sono transizioni abilitate");
+				return;
+			}
 			
-			System.out.println("\t\tSCATTA " + (id = input.readLine()));
-			if(sim.nextStep(id))
+			String[] transitionId = new String[trans.size()];
+			
+			int i=0;
+			for(Transition t : trans){
+				transitionId[i] = t.getId();
+				i++;
+			}
+			
+			int transitionChoice;
+			if(transitionId.length!=1){
+				simMenu = new Menu("Transizioni Abilitate",transitionId);
+				transitionChoice=simMenu.scelta()-1;
+			}
+			else transitionChoice=transitionId.length-1;
+				
+			System.out.println("\t\tSCATTA " + transitionId[transitionChoice]);
+			
+			if(sim.nextStep(transitionId[transitionChoice]))
 				pn = sim.getNet();
-			else  System.out.println("\n\nErrore nel far scattare la transizione");
+			else  System.out.println("\n\nErrore nello scatto della transizione" + transitionId[transitionChoice]);
 		}
 		catch(RemoteException e){
 			System.out.println("Problemi di connessione");
 			e.printStackTrace();
 		}
-		catch(IOException e){
-			System.out.println("Problemi con IO");
+		
+		pn.getInfo();
+	}
+	
+	private void manageSimulation(){
+		try{
+			if(sim.getNet()==null){
+				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+				return;
+			}
+		}
+		catch(RemoteException e){
+			System.out.println("Problemi di connessione");
 			e.printStackTrace();
 		}
 		
-		pn.getInfo();
+		System.out.println("\n\n\t\tINIZIO SIMULAZIONE");
+        
+        do{
+        	oneStepBeyond();
+        	if(!Servizi.risposta("\nContinuare la simulazione"))
+        		break;
+        }while(true);
 	}
 	
 	private void stopClient(){
@@ -130,28 +168,21 @@ public class TetClient {
 		
 		try {
             TetClient tc = new TetClient();
-            tc.loadNet();
+            boolean continua=true;
             
-            
-            System.out.println("Inizio simulazione!!!");
-            
+            tc.mainMenu = new Menu("Menu Principale",MAIN_MENU_OPTION);
             do{
-            	tc.oneStepBeyond();
+            	switch(tc.mainMenu.scelta()){
+            		case 1:tc.loadNet();break;
+            		case 2:tc.manageSimulation();break;
+	            	case 3:tc.saveNet();break;
+	            	case 4:System.out.println("No no no!!!!Funzionalità non ancora implementata!!!");break;
+	            	case 5:tc.stopClient();
+	            		continua=false;break;
+	            	default:break;
+            	}
+            }while(continua);
 
-            	System.out.println("Vuoi Continuare? (y/n)");
-            	if(input.readLine().equalsIgnoreCase("n"))
-            		break;
-            	
-            }while(true);
-            
-            System.out.println("Vuoi salvare la rete?(y/n)");
-            
-            if(input.readLine().equalsIgnoreCase("y")){
-            	tc.saveNet();
-            }
-            
-            tc.stopClient();
-            
         } catch (Exception e) {
             // Something wrong here
             e.printStackTrace();

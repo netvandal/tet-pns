@@ -8,7 +8,7 @@ import java.util.Vector;
  * @author Michele Tameni, Alessio Troiano
  */
 public class PetriNet implements Serializable{
-	
+
 	private Vector<Arc> arcs;
 	private Vector<Place> places;
 	private Vector<Transition> transitions;
