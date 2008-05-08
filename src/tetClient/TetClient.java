@@ -92,13 +92,13 @@ public class TetClient {
 		}
 	}
 	
-	private void oneStepBeyond(){
+	private boolean oneStepBeyond(){
 		try{
 			Vector<Transition> trans = sim.getSelectableTransition();
 			if(trans==null){
-				System.out.println("\t\tDEADLOCK DEADLOCK DEADLOCK DEADLOCK" +
-						"\n\t\tNon ci sono transizioni abilitate");
-				return;
+				System.out.println("\tDEADLOCK DEADLOCK DEADLOCK DEADLOCK" +
+						"\n\tNon ci sono transizioni abilitate\n");
+				return false;
 			}
 			
 			String[] transitionId = new String[trans.size()];
@@ -114,13 +114,16 @@ public class TetClient {
 				simMenu = new Menu("Transizioni Abilitate",transitionId);
 				transitionChoice=simMenu.scelta()-1;
 			}
-			else transitionChoice=transitionId.length-1;
+			else transitionChoice=0; //Viene selezionata automaticamente l'unica transizione abilitata
 				
 			System.out.println("\t\tSCATTA " + transitionId[transitionChoice]);
 			
 			if(sim.nextStep(transitionId[transitionChoice]))
 				pn = sim.getNet();
-			else  System.out.println("\n\nErrore nello scatto della transizione" + transitionId[transitionChoice]);
+			else{
+				System.out.println("\n\nErrore nello scatto della transizione" + transitionId[transitionChoice]);
+				return false;
+			}
 		}
 		catch(RemoteException e){
 			System.out.println("Problemi di connessione");
@@ -128,6 +131,7 @@ public class TetClient {
 		}
 		
 		pn.getInfo();
+		return true;
 	}
 	
 	private void manageSimulation(){
@@ -144,11 +148,16 @@ public class TetClient {
 		
 		System.out.println("\n\n\t\tINIZIO SIMULAZIONE");
         
-        do{
-        	oneStepBeyond();
-        	if(!Servizi.risposta("\nContinuare la simulazione"))
-        		break;
-        }while(true);
+		boolean esci=false;
+		
+		/**
+		 * GUARDA CHE BELLO!!!
+		 * SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
+		 */
+		while(!esci && oneStepBeyond()){
+			esci = !Servizi.risposta("\nContinuare la simulazione ");
+		}
+		System.out.println("Fine della simulazione");
 	}
 	
 	private void stopClient(){

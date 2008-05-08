@@ -10,7 +10,7 @@
       </name>
       <initialMarking>
         <graphics><offset x="-20" y="10" /></graphics>
-        <text>5</text>
+        <text>0</text>
       </initialMarking>
       <graphics><position x="50" y="150" /></graphics>
     </place>
@@ -21,7 +21,7 @@
       </name>
       <initialMarking>
         <graphics><offset x="24" y="5" /></graphics>
-        <text>2</text>
+        <text>0</text>
       </initialMarking>
       <graphics><position x="250" y="150" /></graphics>
     </place>
