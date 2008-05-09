@@ -223,7 +223,7 @@ public class NetGraph extends PCanvas {
 		float m = (y2-y1)/(x2-x1);
 		float m2 = m+1;
 		float m3 = m-1;
-		this.drawArrow(arrowLayer, (int)x1, (int)y1, (int)x2, (int)y2, 2);
+		this.drawArrow(arrowLayer, (int)x2, (int)y2, (int)x1, (int)y1, 2);
 		PPath node = new PPath();
 		//node.moveTo(x-2,y);
 		//node.lineTo(x+2, y+2);
