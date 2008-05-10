@@ -105,6 +105,31 @@ public class Validator {
 		}
 		return true;
 	}
+
+	public static Place placeController(String elementId, String temp1,
+			String posX, String posY, String labelX, String labelY) {
+		
+		Place p=null;
+		int token=0;
+		try{
+			p=new Place();
+			if(elementId==null)
+				return null;
+			
+			p.setId(elementId);
+			p.setCoordX(Integer.parseInt(posX));
+			p.setCoordY(Integer.parseInt(posY));
+			p.setLabelX(Integer.parseInt(labelX));
+			p.setLabelY(Integer.parseInt(labelY));
+			if((token = Integer.parseInt(temp1))>=0)
+				p.addToken(token);
+		}
+		catch(Exception e){
+			System.out.println("PLACE NON VALIDO!!!");
+			return null;
+		}
+		return p;
+	}
 	
 	
 
