@@ -12,7 +12,7 @@
         <graphics><offset x="-20" y="10" /></graphics>
         <text>0</text>
       </initialMarking>
-      <graphics><position x="50" y="150" /></graphics>
+      <graphics><position x="50" y="50" /></graphics>
     </place>
     <place id="p2">
       <name>

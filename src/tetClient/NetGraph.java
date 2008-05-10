@@ -242,19 +242,19 @@ public class NetGraph extends PCanvas {
 	      int i1=12+(int)(stroke*2);
 	      int i2=6+(int)stroke;					
 	      System.out.println("direzione:"+ aDir);
-	      if(aDir>0 && y<yCenter) {
-	    	  x+=8;
-	    	  y+=8;
-	      } else if( aDir>0 && y>yCenter) {
-	    	  x+=8;
-	    	  y-=8;
+	      //if(aDir>0 && y<yCenter) {9
+	    	  x+=10*Math.sin(aDir);
+	    	  y+=10*Math.cos(aDir);
+/*	      } else if( aDir>0 && y>yCenter) {
+	    	  x+=20*Math.cos(aDir);
+	    	  y-=20*Math.sin(aDir);
 	      } if(aDir<0 && y>yCenter) {
-	    	  x-=7;
-	    	  y-=7;
+	    	  x-=20*Math.cos(aDir);
+	    	  y-=20*Math.sin(aDir);
 	      } else if( aDir<0 && y<yCenter) {
-	    	  x-=8;
-	    	  y+=8;
-	      }
+	    	  x-=20*Math.cos(aDir);
+	    	  y+=20*Math.sin(aDir);
+	      }*/
 	      mx[0]=x;
 	      my[0]=y;
 	      mx[1]=x+xCor(i1,aDir+.5);

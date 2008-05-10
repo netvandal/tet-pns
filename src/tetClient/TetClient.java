@@ -154,9 +154,9 @@ public class TetClient {
 		 * GUARDA CHE BELLO!!!
 		 * SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		 */
-		while(!esci && oneStepBeyond()){
+		while(!esci && oneStepBeyond())
 			esci = !Servizi.risposta("\nContinuare la simulazione ");
-		}
+
 		System.out.println("Fine della simulazione");
 	}
 	
