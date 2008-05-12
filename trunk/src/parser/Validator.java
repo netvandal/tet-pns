@@ -2,10 +2,7 @@ package parser;
 
 import java.util.Vector;
 
-import tetPns.Arc;
-import tetPns.PetriNet;
-import tetPns.Place;
-import tetPns.Transition;
+import tetPns.*;
 
 
 /**
@@ -16,15 +13,49 @@ import tetPns.Transition;
  * @author Alessio
  */
 public class Validator {
-	public static boolean validate(PetriNet pn){
-		return (placeController(pn) && transitionController(pn) && arcController(pn) && netIdController(pn));
+	
+	private PetriNet pn;
+	
+	public Validator(){
+		pn=new PetriNet();
+	}
+	
+	public void validate() throws InvalidFileException{
+		if(!netIdController() || !transitionInOutController() || !petriNetController())
+			throw new InvalidFileException();
+	}
+	
+	/**
+	 * Controlla che la rete abbia un numero di archi sensato
+	 */
+	private boolean petriNetController(){
+		
+		int numberOfPlace=pn.getPlaces().size();
+		int numberOfTransition=pn.getTransitions().size();
+		int numberMaxOfArc=2*numberOfPlace*numberOfTransition;
+		return (pn.getArcs().size()<=numberMaxOfArc);	
+	}
+	
+	/**
+	 * Controlla che tutte le transizioni abbiano almeno un arco in ingresso
+	 * e uno in uscita.
+	 */
+	private boolean transitionInOutController(){
+		Vector<Transition> trans=pn.getTransitions();
+		
+		for(Transition t : trans){
+			if(t.getArcIn().size()==0 || t.getArcOut().size()==0)
+				return false;
+		}
+		
+		return true;
 	}
 	
 	/**
 	 * Controlla che non ci siano id duplicati all'interno
 	 * della rete
 	 */
-	private static boolean netIdController(PetriNet pn){
+	private boolean netIdController(){
 		Vector<Place> place=pn.getPlaces();
 		Vector<Transition> trans=pn.getTransitions();
 		Place pi,pj;
@@ -61,76 +92,99 @@ public class Validator {
 	}
 	
 	/**
-	 * Controlla che gli tutti gli archi siano connessi
-	 * ad un qualche elemento
+	 * Controlla l'esistenza e la validità di tutti gli elementi
+	 * di un place
+	 * @throws InvalidFileException 
 	 */
-	private static boolean arcController(PetriNet pn){
-		for(Arc a : pn.getArcs()){
-			if(a.getSourceElement() instanceof Place && !(a.getTargetElement() instanceof Transition))
-				return false;
-			if(a.getSourceElement() instanceof Transition && !(a.getTargetElement() instanceof Place))
-				return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Effettua vari controlli sulle transizioni:
-	 * 1 - tutte le priorità devono essere >=0
-	 * 2 - ogni transizione deve avere almeno un arco in ingresso
-	 *     e almeno uno in uscita.
-	 * @param pn
-	 * @return
-	 */
-	private static boolean transitionController(PetriNet pn){
-		for(Transition t : pn.getTransitions()){
-			if(t.getPriority()<0)
-				return false;	//Problemi con le priorità
-			if(t.getArcIn().size()<=0 || t.getArcOut().size()<=0)
-				return false;	//Problemi con gli archi
-		}
-		return true;	//Tutto ok!!!
-	}
-	
-	/**
-	 * Controlla che tutti i place abbiamo un numero
-	 * di token >=0;
-	 * @param pn
-	 * @return
-	 */
-	private static boolean placeController(PetriNet pn){
-		for(Place p : pn.getPlaces()){
-			if(p.getToken()<0)
-				return false;
-		}
-		return true;
-	}
-
-	public static Place placeController(String elementId, String temp1,
-			String posX, String posY, String labelX, String labelY) {
+	public void placeController(String elementId, String nToken,
+			String posX, String posY, String labelX, String labelY) throws InvalidFileException {
 		
 		Place p=null;
 		int token=0;
 		try{
 			p=new Place();
 			if(elementId==null)
-				return null;
+				throw new InvalidFileException();
 			
 			p.setId(elementId);
 			p.setCoordX(Integer.parseInt(posX));
 			p.setCoordY(Integer.parseInt(posY));
 			p.setLabelX(Integer.parseInt(labelX));
 			p.setLabelY(Integer.parseInt(labelY));
-			if((token = Integer.parseInt(temp1))>=0)
+			if((token = Integer.parseInt(nToken))>=0)
 				p.addToken(token);
 		}
-		catch(Exception e){
-			System.out.println("PLACE NON VALIDO!!!");
-			return null;
+		catch(java.lang.NumberFormatException e){
+			throw new InvalidFileException();
 		}
-		return p;
+		pn.addPlace(p);
 	}
 	
+	/**
+	 * Controlla l'esistenza e la validità di tutti gli elementi
+	 * che compongono una transizione
+	 * 
+	 * @throws InvalidFileException
+	 */
+	public void transitionController(String elementId, String nPriority,
+			String posX, String posY, String labelX, String labelY) throws InvalidFileException{
+		
+		Transition t=null;
+
+		try{
+			if(nPriority==null || Integer.parseInt(nPriority)<0)
+				t=new Transition(-1);	//Transizione non valida
+			else
+				t=new Transition(Integer.parseInt(nPriority));
+			
+			if(elementId==null)
+				throw new InvalidFileException();
+			
+			t.setId(elementId);
+			t.setCoordX(Integer.parseInt(posX));
+			t.setCoordY(Integer.parseInt(posY));
+			t.setLabelX(Integer.parseInt(labelX));
+			t.setLabelY(Integer.parseInt(labelY));
+		}
+		catch(java.lang.NumberFormatException e){
+			throw new InvalidFileException();
+		}
+		pn.addTransition(t);
+	}
 	
+	/**
+	 * Controlla l'esistenza e la validità di tutti gli elementi
+	 * che compongono un arco
+	 * 
+	 * @throws InvalidFileException
+	 */
+	public void arcController(String elementId, String source, String target) throws InvalidFileException{
+
+		if(elementId==null || source==null || target==null)
+			throw new InvalidFileException();
+		
+		Element s,t;
+		
+		s=pn.getElementById(source);
+		t=pn.getElementById(target);
+		
+		//Ogni arco deve essere collegato a 2 elementi
+		if(s==null || t== null)					
+			throw new InvalidFileException();
+		
+		//Se source è un posto allora target deve essere una transizione
+		if(s instanceof Place && !(t instanceof Transition))
+			throw new InvalidFileException();
+		
+		//Se source è una transizione allora target deve essere un posto
+		if(s instanceof Transition && !(t instanceof Place))
+			throw new InvalidFileException();
+		
+		pn.addArc(new Arc(elementId,s,t));
+	}
+	
+	public PetriNet getPetriNet(){
+		return pn;
+	}
 
 }

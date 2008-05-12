@@ -178,7 +178,6 @@ public class TetClient {
 		try {
             TetClient tc = new TetClient();
             boolean continua=true;
-            
             tc.mainMenu = new Menu("Menu Principale",MAIN_MENU_OPTION);
             do{
             	switch(tc.mainMenu.scelta()){

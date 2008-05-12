@@ -20,7 +20,6 @@ public class Transition  extends Element{
 	
 	/**
 	 * Constructor
-	 * @param p Priority of the transition
 	 */
 	public Transition(int p) {
 		this.transId = null;
