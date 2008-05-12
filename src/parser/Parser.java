@@ -15,7 +15,7 @@ import tetPns.PetriNet;
 public class Parser {
 	
 	XMLReader parser;
-	ParserMainHandler pmh;
+	Validator validator;
 		
 	public Parser() {
 		
@@ -26,23 +26,23 @@ public class Parser {
 	    	System.err.println("createXMLReader failed.");
 	    	return;
 	    }
-	    pmh = new ParserMainHandler();
-	    parser.setContentHandler(pmh);
+	    validator = new Validator();
+	    parser.setContentHandler(new ParserMainHandler(validator));
 	}
 	
 	public PetriNet parsePetriNet(String toParse){
 		try{
 			parser.parse(toParse);
+			validator.validate();
+			return validator.getPetriNet();
+		}
+		catch(SAXException e){
+			return null;
 		}
 		catch(Exception e){
-			System.err.println(e.toString());
+			System.out.println("Problemi di I/O nel parser.");
+			return null;
 		}
-
-		//Se il file è valido viene ritornata la rete di Petri
-		if(Validator.validate(pmh.getPetriNet()))
-			return pmh.getPetriNet();
-		return null;
-			
 	}
 	
 }

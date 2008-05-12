@@ -16,10 +16,10 @@ public class Arc extends Element{
 	private int weight = WEIGHT;
 	String arcId;
 	
-	public	Arc () {
-		this.sourceElement = null;
-		this.targetElement = null;
-		this.arcId = null;
+	public	Arc (String id, Element s, Element t) {
+		this.sourceElement = s;
+		this.targetElement = t;
+		this.arcId = id;
 	}
 	
 	public void setSourceElement(Element start) {

@@ -32,7 +32,7 @@
       </name>
       <graphics><position x="150" y="50" /></graphics>
     </transition>
-    <transition id="t2" priority="0">
+    <transition id="t2" priority="5">
       <name>
         <graphics><offset x="-1" y="22" /></graphics>
         <text>t2</text>
