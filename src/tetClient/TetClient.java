@@ -18,7 +18,7 @@ import tetServer.ISimulator;
 
 public class TetClient {
 	
-	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Esci"};
+	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale"};
 	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorità","Esci"};
 	
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
@@ -52,7 +52,7 @@ public class TetClient {
 		boolean continua=true;
 		do{
 			switch(loadNetMenu.scelta()){
-				case 1: File f = new File(Servizi.leggiStringa("Inserisci il nome del file: "));
+				case 1: File f = new File(Service.leggiStringa("Inserisci il nome del file: "));
 					if(f.exists()){
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
@@ -84,7 +84,7 @@ public class TetClient {
 	
 	private void saveNet(){
 		try{
-			disp.sendNet(pn, Servizi.leggiStringa("Inserisci il nome del file:"));
+			disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del file:"));
 		}
 		catch(Exception e){
 			System.out.println("Problemi in saveNet");
@@ -155,7 +155,7 @@ public class TetClient {
 		 * SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		 */
 		while(!esci && oneStepBeyond())
-			esci = !Servizi.risposta("\nContinuare la simulazione ");
+			esci = !Service.risposta("\nContinuare la simulazione ");
 
 		System.out.println("Fine della simulazione");
 	}

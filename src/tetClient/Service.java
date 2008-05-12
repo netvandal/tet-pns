@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
-public class Servizi
+public class Service
 {
 	private final static String ERRORE_TASTIERA = "Sono stati riscontrati gravi problemi con la tastiera.\n";
 	private final static String EXIT_MSG = "Il programma verrà terminato!!!\n";
