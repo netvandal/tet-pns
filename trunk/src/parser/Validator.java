@@ -133,7 +133,7 @@ public class Validator {
 
 		try{
 			if(nPriority==null || Integer.parseInt(nPriority)<0)
-				t=new Transition(-1);	//Priorità non valida
+				t=new Transition(0);	//Priorità di default
 			else
 				t=new Transition(Integer.parseInt(nPriority));
 			
