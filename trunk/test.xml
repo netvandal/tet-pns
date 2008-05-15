@@ -12,7 +12,7 @@
         <graphics><offset x="-20" y="10" /></graphics>
         <text>0</text>
       </initialMarking>
-      <graphics><position x="50" y="50" /></graphics>
+      <graphics><position x="70" y="50" /></graphics>
     </place>
     <place id="p2">
       <name>
@@ -23,21 +23,21 @@
         <graphics><offset x="24" y="5" /></graphics>
         <text>0</text>
       </initialMarking>
-      <graphics><position x="250" y="150" /></graphics>
+      <graphics><position x="155" y="150" /></graphics>
     </place>
     <transition id="t1" priority="0">
       <name>
         <graphics><offset x="0" y="26" /></graphics>
         <text>t1</text>
       </name>
-      <graphics><position x="150" y="50" /></graphics>
+      <graphics><position x="150" y="55" /></graphics>
     </transition>
     <transition id="t2" priority="5">
       <name>
         <graphics><offset x="-1" y="22" /></graphics>
         <text>t2</text>
       </name>
-      <graphics><position x="150" y="250" /></graphics>
+      <graphics><position x="45" y="155" /></graphics>
     </transition>
     <arc id="a1" source="p1" target="t1">
       <inscription>

@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import parser.Parser;
+import tetPns.Element;
 import tetPns.PetriNet;
 import tetPns.Place;
 import tetPns.Transition;
@@ -35,6 +36,12 @@ public class NetGraph extends PCanvas {
 	PLayer edgeLayer = new PLayer();
 	PLayer labelLayer = new PLayer();
 	PLayer arrowLayer = new PLayer();
+	
+	int largTrans = 30;
+	int altTrans = 10;
+	
+	int ragPlace = 20;
+	
 	public NetGraph(int width, int height) {
 		setPreferredSize(new Dimension(width, height));
 		
@@ -66,7 +73,7 @@ public class NetGraph extends PCanvas {
 		// disegno tutti i places
 		for(Place place : pn.getPlaces()) {
 			place.getInfo();
-			node = PPath.createEllipse(place.getXCoord(), place.getYCoord(), 20, 20);
+			node = PPath.createEllipse(place.getXCoord(), place.getYCoord(), ragPlace, ragPlace);
 			node.addAttribute("edges", new ArrayList());
 			node.addAttribute("id", place.getId());
 			node.addAttribute("type", "place");
@@ -92,7 +99,7 @@ public class NetGraph extends PCanvas {
 		// disegno tutte le transizioni
 		for(Transition transition : pn.getTransitions()) {
 			transition.getInfo();
-			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), 30, 10);
+			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), largTrans, altTrans);
 
 			node.addAttribute("edges", new ArrayList());
 			node.addAttribute("id", transition.getId());
@@ -143,65 +150,7 @@ public class NetGraph extends PCanvas {
 			}
 		}
 			
-		
-			/*
-                // Create some random edges
-		// Each edge's attribute set has an ArrayList to store associated nodes
-		for (int i = 0; i < 4; i++) {
-			int n1 = random.nextInt(numNodes);
-			int n2 = random.nextInt(numNodes);
-			while (n1 == n2) {
-				n2 = random.nextInt(numNodes);  // Make sure we have two distinct nodes.
-			}
-			
-			PNode node1 = nodeLayer.getChild(n1);
-			PNode node2 = nodeLayer.getChild(n2);
-			PPath edge = new PPath();
-			((ArrayList)node1.getAttribute("edges")).add(edge);
-			((ArrayList)node2.getAttribute("edges")).add(edge);
-			edge.addAttribute("nodes", new ArrayList());
-			((ArrayList)edge.getAttribute("nodes")).add(node1);
-			((ArrayList)edge.getAttribute("nodes")).add(node2);
-			edgeLayer.addChild(edge);
-			updateEdge(edge);
-		}*/
-		
-                // Create event handler to move nodes and update edges
-		/*nodeLayer.addInputEventListener(new PDragEventHandler() {
-			{
-				PInputEventFilter filter = new PInputEventFilter();
-				filter.setOrMask(InputEvent.BUTTON1_MASK | InputEvent.BUTTON3_MASK);
-				setEventFilter(filter);
-			}
-			public void mouseEntered(PInputEvent e) {
-				super.mouseEntered(e);
-				if (e.getButton() == MouseEvent.NOBUTTON) {
-					e.getPickedNode().setPaint(Color.RED);
-				}
-			}
-			
-			public void mouseExited(PInputEvent e) {
-				super.mouseExited(e);
-				if (e.getButton() == MouseEvent.NOBUTTON) {
-					e.getPickedNode().setPaint(Color.WHITE);
-				}
-			}
-			
-			protected void startDrag(PInputEvent e) {
-				super.startDrag(e);
-				e.setHandled(true);
-				e.getPickedNode().moveToFront();
-			}
-			
-			protected void drag(PInputEvent e) {
-				super.drag(e);
-				
-				ArrayList edges = (ArrayList) e.getPickedNode().getAttribute("edges");
-				for (int i = 0; i < edges.size(); i++) {
-					NetGraph.this.updateEdge((PPath) edges.get(i));
-				}
-			}
-		}); */
+
 	}
 	
 	
@@ -223,7 +172,7 @@ public class NetGraph extends PCanvas {
 		float m = (y2-y1)/(x2-x1);
 		float m2 = m+1;
 		float m3 = m-1;
-		this.drawArrow(arrowLayer, (int)x2, (int)y2, (int)x1, (int)y1, 2);
+		this.drawArrow(arrowLayer, (int)x2, (int)y2, (int)x1, (int)y1, 2, (node2.getAttribute("type")).toString());
 		PPath node = new PPath();
 		//node.moveTo(x-2,y);
 		//node.lineTo(x+2, y+2);
@@ -234,7 +183,7 @@ public class NetGraph extends PCanvas {
 
 
 	
-	 public  void drawArrow(PLayer g2d, int xCenter, int yCenter, int x, int y, float stroke) {
+	 public  void drawArrow(PLayer g2d, int xCenter, int yCenter, int x, int y, float stroke, String type) {
 		  float mx[] = new float[5], my[] = new float[5];
 	      double aDir=Math.atan2(xCenter-x,yCenter-y);
 	      PPath p = null;
@@ -243,8 +192,36 @@ public class NetGraph extends PCanvas {
 	      int i2=6+(int)stroke;					
 	      System.out.println("direzione:"+ aDir);
 	      //if(aDir>0 && y<yCenter) {9
-	    	  x+=10*Math.sin(aDir);
-	    	  y+=10*Math.cos(aDir);
+	      if(type.equals("place")) {
+	      	  x+=ragPlace/2*Math.sin(aDir);
+	    	  y+=ragPlace/2*Math.cos(aDir);
+	      }	else {
+	      	  //if(Math.sin(aDir)>0)  y+=15/Math.tan(Math.PI/2-aDir); else y-=15/Math.tan(Math.PI/2-aDir);
+	      	  //if(Math.cos(aDir)<0) x-=Math.tan(Math.PI/2-aDir)*5; else x+=Math.tan(Math.PI/2-aDir)*5-15;
+	    	  
+	    	  float angComp = (float) Math.atan(((float)largTrans/2.0) / ((float)altTrans/2.0) );
+	    	  System.out.println("\nAngoComp : " + angComp);
+	    	  
+	    	  if((aDir<angComp && aDir<(Math.PI+angComp))) { // lato sx
+	    		  x-=15;
+	    		  y+=(Math.tan(aDir)*altTrans/2);
+		    	  System.out.println("Lato sx:  = " + aDir);
+
+	    	  } else if (aDir>angComp && aDir<(Math.PI-angComp)) {
+	    		  y+=5;
+	    		  x=(int) Math.tan(Math.PI-aDir);
+	    		  System.out.println("Lato sotto");
+	    	  } else if (aDir<angComp && aDir>(Math.PI+angComp)) {
+	    		  x+=15;
+	    		  y=(int) (Math.tan(aDir)*altTrans/2);
+	    		  System.out.println("Lato dx");
+	    	  } else {
+	    		  y-=15;
+	    		  x=(int) Math.tan(Math.PI-aDir);
+	    		  System.out.println("Lato sopra");
+
+	    	  }	    	  
+	      }
 /*	      } else if( aDir>0 && y>yCenter) {
 	    	  x+=20*Math.cos(aDir);
 	    	  y-=20*Math.sin(aDir);
