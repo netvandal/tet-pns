@@ -92,6 +92,31 @@ public class TetClient {
 		}
 	}
 	
+	private void changeTransitioPriority(){
+		int newPriority;
+		Transition t;
+		if(pn==null){
+			System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+			return;
+		}
+		Vector<Transition> transitions = pn.getTransitions();
+		for(int i=0;i<transitions.size();i++){
+			t=transitions.get(i);
+			if((newPriority=Service.leggiInt("Inserire la nuova priorità per " + t.getId() + ":"))<0){
+				System.out.println("\nATTENZIONE!!! La priorità deve essere positiva.");
+				i--;
+			}
+			else
+				t.setPriority(newPriority);
+		}
+			
+		try {
+			sim.setNet(pn);
+		} catch (RemoteException e) {
+			System.out.println("Problemi con il server");
+		}
+	}
+	
 	private boolean oneStepBeyond(){
 		try{
 			Vector<Transition> trans = sim.getSelectableTransition();
@@ -184,7 +209,7 @@ public class TetClient {
             		case 1:tc.loadNet();break;
             		case 2:tc.manageSimulation();break;
 	            	case 3:tc.saveNet();break;
-	            	case 4:System.out.println("No no no!!!!Funzionalità non ancora implementata!!!");break;
+	            	case 4:tc.changeTransitioPriority();break;
 	            	case 5:tc.stopClient();
 	            		continua=false;break;
 	            	default:break;
