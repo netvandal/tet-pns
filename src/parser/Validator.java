@@ -27,6 +27,7 @@ public class Validator {
 	
 	/**
 	 * Controlla che la rete abbia un numero di archi sensato
+	 * (numeroArchi <= 2* numero_Posti * numero_Transizioni)
 	 */
 	private boolean petriNetController(){
 		
@@ -102,7 +103,7 @@ public class Validator {
 		Place p=null;
 		int token=0;
 		try{
-			p=new Place();
+			p=new Place(); //la quantità di token di default è 0
 			if(elementId==null)
 				throw new InvalidFileException();
 			
@@ -132,7 +133,7 @@ public class Validator {
 		Transition t=null;
 
 		try{
-			if(nPriority==null || Integer.parseInt(nPriority)<0)
+			if(nPriority==null || Integer.parseInt(nPriority)<=0)
 				t=new Transition(0);	//Priorità di default
 			else
 				t=new Transition(Integer.parseInt(nPriority));
