@@ -80,9 +80,9 @@ public class Service
 		return false;
 	}
 	
-	public static Vector spezzaStringa(String a)
+	public static Vector<String> spezzaStringa(String a)
 	{
-		Vector t=new Vector();
+		Vector<String> t=new Vector<String>();
 		int indexSpazio=0;
 		boolean fine=false;
 		
