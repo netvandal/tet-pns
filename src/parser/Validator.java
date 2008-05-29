@@ -108,14 +108,21 @@ public class Validator {
 				throw new InvalidFileException();
 			
 			p.setId(elementId);
-			p.setCoordX(Integer.parseInt(posX));
-			p.setCoordY(Integer.parseInt(posY));
-			p.setLabelX(Integer.parseInt(labelX));
-			p.setLabelY(Integer.parseInt(labelY));
+			System.out.println(elementId);
+			p.setCoordX(Math.round(Float.parseFloat(posX)));
+			//System.out.println("1");
+			p.setCoordY(Math.round(Float.parseFloat(posY)));
+			//System.out.println("2");
+			p.setLabelX(Math.round(Float.parseFloat(labelX))); // FIXME da controllare... un label..perch lo parso
+			//System.out.println("3");
+			p.setLabelY(Math.round(Float.parseFloat(labelY)));
+			System.out.println(nToken);
 			if((token = Integer.parseInt(nToken))>=0)
 				p.addToken(token);
+				
 		}
 		catch(java.lang.NumberFormatException e){
+			System.out.println("In place error");
 			throw new InvalidFileException();
 		}
 		pn.addPlace(p);
@@ -142,10 +149,10 @@ public class Validator {
 				throw new InvalidFileException();
 			
 			t.setId(elementId);
-			t.setCoordX(Integer.parseInt(posX));
-			t.setCoordY(Integer.parseInt(posY));
-			t.setLabelX(Integer.parseInt(labelX));
-			t.setLabelY(Integer.parseInt(labelY));
+			t.setCoordX(Math.round(Float.parseFloat(posX)));
+			t.setCoordY(Math.round(Float.parseFloat(posY)));
+			t.setLabelX(Math.round(Float.parseFloat(labelX)));
+			t.setLabelY(Math.round(Float.parseFloat(labelY)));
 		}
 		catch(java.lang.NumberFormatException e){
 			throw new InvalidFileException();
