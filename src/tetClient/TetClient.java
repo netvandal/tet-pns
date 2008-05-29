@@ -25,6 +25,7 @@ public class TetClient {
 	private ISimulator sim;
 	private IDispenser disp;
 	private PetriNet pn;
+	private GraphEditorTester graph;
 	
 	private TetClient() {
 		try{
@@ -143,8 +144,10 @@ public class TetClient {
 				
 			System.out.println("\t\tSCATTA " + transitionId[transitionChoice]);
 			
-			if(sim.nextStep(transitionId[transitionChoice]))
+			if(sim.nextStep(transitionId[transitionChoice])) {
 				pn = sim.getNet();
+				this.graph.redraw();
+			}
 			else{
 				System.out.println("\n\nErrore nello scatto della transizione" + transitionId[transitionChoice]);
 				return false;
@@ -172,6 +175,7 @@ public class TetClient {
 		}
 		
 		System.out.println("\n\n\t\tINIZIO SIMULAZIONE");
+		this.graph = new GraphEditorTester(pn);
         
 		boolean esci=false;
 		
@@ -207,7 +211,9 @@ public class TetClient {
             do{
             	switch(tc.mainMenu.scelta()){
             		case 1:tc.loadNet();break;
-            		case 2:tc.manageSimulation();break;
+            		case 2:tc.manageSimulation();
+            			
+            		break;
 	            	case 3:tc.saveNet();break;
 	            	case 4:tc.changeTransitioPriority();break;
 	            	case 5:tc.stopClient();

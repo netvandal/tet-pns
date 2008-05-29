@@ -42,7 +42,7 @@ public class NetGraph extends PCanvas {
 	
 	int ragPlace = 20;
 	
-	public NetGraph(int width, int height) {
+	public NetGraph(int width, int height, PetriNet pn) {
 		setPreferredSize(new Dimension(width, height));
 		
 		/*
@@ -50,8 +50,8 @@ public class NetGraph extends PCanvas {
 		 */
 		
 		
-		Parser myParser = new Parser();
-		PetriNet pn = myParser.parsePetriNet("test.xml");
+		//Parser myParser = new Parser();
+		//PetriNet pn = myParser.parsePetriNet("test.xml");
 		
         // Initialize, and create a layer for the edges
         // (always underneath the nodes)
