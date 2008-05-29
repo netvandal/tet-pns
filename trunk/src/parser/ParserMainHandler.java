@@ -52,7 +52,7 @@ public class ParserMainHandler implements ContentHandler{
 			labelY=atts.getValue("y");
 		}
 		else if(name.equals("initialMarking")) inInitialMarking=true;
-		else if(name.equals("text") && inPlace && inInitialMarking) inToken=true;
+		else if(name.equals("value") && inPlace && inInitialMarking) inToken=true;
 		
 	}
 	
@@ -60,7 +60,10 @@ public class ParserMainHandler implements ContentHandler{
 			throws SAXException {
 		
 		String content = new String(ch,start,length);
-		if(inPlace && inInitialMarking && inToken) temp1=content; //token del place	
+		if(inPlace && inInitialMarking && inToken) {
+			temp1=content; //token del place	
+			System.out.println("valore:" + temp1);
+		}
 	}
 
 	public void endElement(String uri, String localName, String name)
@@ -82,8 +85,8 @@ public class ParserMainHandler implements ContentHandler{
 			elementId=posX=posY=labelX=labelY=temp1=temp2=null;
 		}
 		else if(name.equals("name"))inName=false;
-		else if(name.equals("InitialMarking"))inInitialMarking=false;
-		else if(name.equals("text") && inToken) inToken=false;
+		else if(name.equals("initialMarking"))inInitialMarking=false;
+		else if(name.equals("value") && inToken) inToken=false;
 	}
 	
 	public void endDocument() throws SAXException {
