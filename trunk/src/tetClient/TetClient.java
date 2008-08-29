@@ -38,13 +38,13 @@ public class TetClient {
 		}
 		catch(RemoteException e){
 			//Problemi di connessione
-			System.out.println("Problemi di connessione");
-			e.printStackTrace();
+			System.out.println("Problemi di connessione.\nChiusura del programma.");
+			//e.printStackTrace();
 			System.exit(1);
 		}
 		catch(NotBoundException e){
-			System.out.println("I nomi dei servizi non hanno un bind nel registro.");
-			e.printStackTrace();
+			System.out.println("I nomi dei servizi non hanno un bind nel registro.\nChiusura del programma.");
+			//e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -80,11 +80,19 @@ public class TetClient {
 		if(pn!=null){
 			pn.getInfo();
 			sim.setNet(pn);
+			
+			if(this.graph!=null)
+				this.graph.setVisible(false);
+			this.graph = new GraphEditorTester(pn);
 		}
 	}
 	
 	private void saveNet(){
 		try{
+			if(pn==null){
+				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+				return;
+			}
 			disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del file:"));
 		}
 		catch(Exception e){
@@ -175,7 +183,7 @@ public class TetClient {
 		}
 		
 		System.out.println("\n\n\t\tINIZIO SIMULAZIONE");
-		this.graph = new GraphEditorTester(pn);
+		//this.graph = new GraphEditorTester(pn);
         
 		boolean esci=false;
 		
@@ -192,6 +200,7 @@ public class TetClient {
 	private void stopClient(){
 		try{
 			sim.stopSimulation();
+			this.graph.setVisible(false);
 		}
 		catch(RemoteException e){
 			System.out.println("Problemi di connessione");
@@ -206,21 +215,19 @@ public class TetClient {
 		
 		try {
             TetClient tc = new TetClient();
-            boolean continua=true;
             tc.mainMenu = new Menu("Menu Principale",MAIN_MENU_OPTION);
             do{
             	switch(tc.mainMenu.scelta()){
             		case 1:tc.loadNet();break;
-            		case 2:tc.manageSimulation();
-            			
-            		break;
+            		case 2:tc.manageSimulation();break;
 	            	case 3:tc.saveNet();break;
 	            	case 4:tc.changeTransitioPriority();break;
 	            	case 5:tc.stopClient();
-	            		continua=false;break;
+	            		//continua=false;break;
+	            		System.exit(0);break;
 	            	default:break;
             	}
-            }while(continua);
+            }while(true);
 
         } catch (Exception e) {
             // Something wrong here
