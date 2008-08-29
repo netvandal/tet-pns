@@ -14,7 +14,7 @@ public class ParserMainHandler implements ContentHandler{
 	private String posX, posY, labelX, labelY;
 	private String temp1,temp2;
 	
-	private boolean inPlace, inTrans, inArc,inToken, inInitialMarking, inName;
+	private boolean inPlace, inTrans, inArc,inToken, inInitialMarking, inName, inPriority, inPriorityValue;
 
 	public ParserMainHandler(Validator v){
 		validator=v;
@@ -31,10 +31,10 @@ public class ParserMainHandler implements ContentHandler{
 			inPlace=true;
 			elementId=atts.getValue("id");
 		}
-		else if(name.equals("transition") && (atts.getLength()==1 || atts.getLength()==2)){
+		else if(name.equals("transition") && atts.getLength()==1){
 			inTrans=true;
 			elementId=atts.getValue("id");
-			if(atts.getLength()==2) temp1=atts.getValue("priority");
+			//if(atts.getLength()==2) temp1=atts.getValue("priority");
 		}
 		else if(name.equals("arc") && atts.getLength()==3){
 			elementId=atts.getValue("id");
@@ -53,7 +53,8 @@ public class ParserMainHandler implements ContentHandler{
 		}
 		else if(name.equals("initialMarking")) inInitialMarking=true;
 		else if(name.equals("value") && inPlace && inInitialMarking) inToken=true;
-		
+		else if(name.equals("priority") && inTrans) inPriority=true;
+		else if(name.equals("value") && inPriority) inPriorityValue=true;
 	}
 	
 	public void characters(char[] ch, int start, int length)
@@ -62,8 +63,10 @@ public class ParserMainHandler implements ContentHandler{
 		String content = new String(ch,start,length);
 		if(inPlace && inInitialMarking && inToken) {
 			temp1=content; //token del place	
-			System.out.println("valore:" + temp1);
+			System.out.println("\n\n\tDENTRO IL PARSERMAINHANDLER \t valore:" + temp1);
 		}
+		
+		if(inTrans && inPriority && inPriorityValue) temp1=content; //priorità della transizione
 	}
 
 	public void endElement(String uri, String localName, String name)
@@ -87,6 +90,8 @@ public class ParserMainHandler implements ContentHandler{
 		else if(name.equals("name"))inName=false;
 		else if(name.equals("initialMarking"))inInitialMarking=false;
 		else if(name.equals("value") && inToken) inToken=false;
+		else if(name.equals("priority")) inPriority=false;
+		else if(name.equals("value") && inPriorityValue) inPriorityValue=false;
 	}
 	
 	public void endDocument() throws SAXException {
