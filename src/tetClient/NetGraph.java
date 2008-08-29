@@ -199,10 +199,18 @@ public class NetGraph extends PCanvas {
 	      	  //if(Math.sin(aDir)>0)  y+=15/Math.tan(Math.PI/2-aDir); else y-=15/Math.tan(Math.PI/2-aDir);
 	      	  //if(Math.cos(aDir)<0) x-=Math.tan(Math.PI/2-aDir)*5; else x+=Math.tan(Math.PI/2-aDir)*5-15;
 	    	  
-	    	  float angComp = (float) Math.atan(((float)largTrans/2.0) / ((float)altTrans/2.0) );
+	    	  float angComp = (float) Math.atan(((float)largTrans) / ((float)altTrans) );
 	    	  System.out.println("\nAngoComp : " + angComp);
 	    	  
-	    	  if((aDir<angComp && aDir<(Math.PI+angComp))) { // lato sx
+	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sopra (in Teoria!!!)
+	    		  y+=altTrans;
+	    		  x-=Math.tan(aDir)*altTrans/2;
+	    	  }
+	    	  else if(aDir<=(2*Math.PI+angComp) && aDir>=(2*Math.PI-angComp)){ //Lato sx (in Teoria!!!)
+	    		  x-=largTrans;
+	    		  y+=Math.tan(Math.PI-aDir)*largTrans/2;
+	    	  }
+	    /*	  if((aDir<angComp && aDir<(Math.PI+angComp))) { // lato sx
 	    		  x-=15;
 	    		  y+=(Math.tan(aDir)*altTrans/2);
 		    	  System.out.println("Lato sx:  = " + aDir);
@@ -220,7 +228,7 @@ public class NetGraph extends PCanvas {
 	    		  x=(int) Math.tan(Math.PI-aDir);
 	    		  System.out.println("Lato sopra");
 
-	    	  }	    	  
+	    	  }	    	  */
 	      }
 /*	      } else if( aDir>0 && y>yCenter) {
 	    	  x+=20*Math.cos(aDir);
