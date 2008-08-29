@@ -25,7 +25,7 @@ public class GraphEditorTester extends JFrame {
 	}
 	
 	public void redraw() {
-		System.out.println("redrawing");
+		//System.out.println("redrawing");
 		getContentPane().remove(this.graphEditor);
 		this.graphEditor = new NetGraph(500, 500, pnz);
 		getContentPane().add(graphEditor);

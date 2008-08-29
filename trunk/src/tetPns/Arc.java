@@ -55,6 +55,6 @@ public class Arc extends Element{
 	
 		sourceId = sourceElement.getId();
 		targetId = targetElement.getId();
-		System.out.println("Arco " + arcId + " Source " + sourceId + " Target " + targetId);
+		System.out.println("Arco " + arcId + "\tSource:" + sourceId + "\tTarget:" + targetId);
 	}
 }

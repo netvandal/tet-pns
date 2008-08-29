@@ -40,7 +40,7 @@ public class Place extends Element {
 	}
 	
 	public void getInfo() {
-		System.out.println("Place " + this.placeId + " con " + this.token + " Token ; x,y = " + this.myX + "," + myY + " labelcoords: "+ labelX +","+ labelY +"\n");		
+		System.out.println("Place " + this.placeId + " con " + this.token + " Token");// x,y = " + this.myX + "," + myY + " labelcoords: "+ labelX +","+ labelY +"\n");		
 	}
 	
 	public void setCoordX (int x) {

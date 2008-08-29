@@ -151,6 +151,8 @@ public class PetriNet implements Serializable{
 			place.getInfo();
 		}
 		
+		System.out.println();
+		
 		for(Transition trans : transitions) {
 			trans.getInfo();
 		}
@@ -158,7 +160,6 @@ public class PetriNet implements Serializable{
 		for(Arc arc : arcs) {
 			arc.getInfo();
 		}
-		
 	}
 	
 }

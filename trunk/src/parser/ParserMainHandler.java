@@ -63,7 +63,7 @@ public class ParserMainHandler implements ContentHandler{
 		String content = new String(ch,start,length);
 		if(inPlace && inInitialMarking && inToken) {
 			temp1=content; //token del place	
-			System.out.println("\n\n\tDENTRO IL PARSERMAINHANDLER \t valore:" + temp1);
+			//System.out.println("\n\n\tDENTRO IL PARSERMAINHANDLER \t valore:" + temp1);
 		}
 		
 		if(inTrans && inPriority && inPriorityValue) temp1=content; //priorità della transizione
