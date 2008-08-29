@@ -78,7 +78,7 @@ public class TetClient {
 		}while(pn==null && continua);
 		
 		if(pn!=null){
-			pn.getInfo();
+			//pn.getInfo();
 			sim.setNet(pn);
 			
 			if(this.graph!=null)
@@ -101,7 +101,7 @@ public class TetClient {
 		}
 	}
 	
-	private void changeTransitioPriority(){
+	private void changeTransitionPriority(){
 		int newPriority;
 		Transition t;
 		if(pn==null){
@@ -166,7 +166,7 @@ public class TetClient {
 			e.printStackTrace();
 		}
 		
-		pn.getInfo();
+		//pn.getInfo();
 		return true;
 	}
 	
@@ -200,7 +200,8 @@ public class TetClient {
 	private void stopClient(){
 		try{
 			sim.stopSimulation();
-			this.graph.setVisible(false);
+			if(graph!=null)
+				this.graph.setVisible(false);
 		}
 		catch(RemoteException e){
 			System.out.println("Problemi di connessione");
@@ -221,7 +222,7 @@ public class TetClient {
             		case 1:tc.loadNet();break;
             		case 2:tc.manageSimulation();break;
 	            	case 3:tc.saveNet();break;
-	            	case 4:tc.changeTransitioPriority();break;
+	            	case 4:tc.changeTransitionPriority();break;
 	            	case 5:tc.stopClient();
 	            		//continua=false;break;
 	            		System.exit(0);break;

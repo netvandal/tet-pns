@@ -72,7 +72,7 @@ public class NetGraph extends PCanvas {
 		
 		// disegno tutti i places
 		for(Place place : pn.getPlaces()) {
-			place.getInfo();
+			//place.getInfo();
 			node = PPath.createEllipse(place.getXCoord(), place.getYCoord(), ragPlace, ragPlace);
 			node.addAttribute("edges", new ArrayList());
 			node.addAttribute("id", place.getId());
@@ -98,7 +98,7 @@ public class NetGraph extends PCanvas {
 
 		// disegno tutte le transizioni
 		for(Transition transition : pn.getTransitions()) {
-			transition.getInfo();
+			//transition.getInfo();
 			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), largTrans, altTrans);
 
 			node.addAttribute("edges", new ArrayList());
@@ -122,7 +122,7 @@ public class NetGraph extends PCanvas {
 		PNode nodeTest = null;
 		//disegno tutti gli archi:
 		for(Arc arc : pn.getArcs()) {
-			arc.getInfo();
+			//arc.getInfo();
 			String in = arc.getSourceElement().getId();
 			String out = arc.getTargetElement().getId();
 			PNode node1 = null, node2 = null;
@@ -190,7 +190,7 @@ public class NetGraph extends PCanvas {
 	      p = PPath.createLine(x,y,xCenter,yCenter);
 	      int i1=12+(int)(stroke*2);
 	      int i2=6+(int)stroke;					
-	      System.out.println("direzione:"+ aDir);
+	      //System.out.println("direzione:"+ aDir);
 	      //if(aDir>0 && y<yCenter) {9
 	      if(type.equals("place")) {
 	      	  x+=ragPlace/2*Math.sin(aDir);
@@ -200,7 +200,7 @@ public class NetGraph extends PCanvas {
 	      	  //if(Math.cos(aDir)<0) x-=Math.tan(Math.PI/2-aDir)*5; else x+=Math.tan(Math.PI/2-aDir)*5-15;
 	    	  
 	    	  float angComp = (float) Math.atan(((float)largTrans) / ((float)altTrans) );
-	    	  System.out.println("\nAngoComp : " + angComp);
+	    	  //System.out.println("\nAngoComp : " + angComp);
 	    	  
 	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sopra (in Teoria!!!)
 	    		  y+=altTrans;
