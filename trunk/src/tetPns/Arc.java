@@ -1,9 +1,9 @@
 package tetPns;
 
 /**
- * Arcs descriptor
+ * Descrittore dell'Arco
  * @author Michele Tameni, Alessio Troiano
- *
+ * @version 1.0
  */
 
 

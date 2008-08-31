@@ -17,8 +17,9 @@ import java.util.Vector;
 import tetPns.PetriNet;
 
 /**
- * @author michele
- *
+ * Gestisce l'archivio remoto
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  */
 public class Dispenser implements IDispenser, Serializable {
 

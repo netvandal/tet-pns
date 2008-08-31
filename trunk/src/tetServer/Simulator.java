@@ -11,8 +11,9 @@ import tetPns.PetriNet;
 import tetPns.Transition;
 
 /**
- * @author michele
- *
+ * Gestisce la simulazione remota
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  */
 public class Simulator implements ISimulator, Serializable {
 
@@ -25,9 +26,7 @@ public class Simulator implements ISimulator, Serializable {
 		} else return null; // non stata settata nessuna rete di petri.		
 	}
 
-	/* 
-	 * fa scattare la transizione selezionata
-	 */
+
 	public boolean nextStep(String transId) {
 		if(myNet!=null) return myNet.fireTransition(transId);
 		else return false;
@@ -37,16 +36,11 @@ public class Simulator implements ISimulator, Serializable {
 	public PetriNet getNet() {
 		return myNet;
 	}
-	
-	/*
-	 *  Setta la rete di petri di cui effettuare la
-	 * simulazione. 
-	 */
+
 	public boolean setNet(PetriNet net) throws RemoteException {
-		myNet = net;
-		return true;
-		
-		// TODO verificare se riusciuto il settaggio, in caso contrario ritorno false.
+		myNet = net;		
+		if(myNet!=null) return true;
+			else return false;
 	}
 
 

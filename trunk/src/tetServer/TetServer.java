@@ -8,17 +8,17 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-
 /**
- * @author Alessio, Michele
- *
+ * Effettua il binding dei servizi nel registro RMI
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  */
+
 public class TetServer extends UnicastRemoteObject{
 
 
 	protected TetServer() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args)  {
@@ -33,9 +33,9 @@ public class TetServer extends UnicastRemoteObject{
 			r.rebind("DISPENSER", disp);
 			
 		}
-		/* If any communication failures occur... */
+		// se c'è qualche errore di comunicazione
 		catch (RemoteException e) {
-			System.out.println("Communication error " + e.toString());
+			System.out.println("Errore di comunicazione " + e.toString());
 		}
 	}
 

@@ -5,6 +5,16 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
+/**
+ * 
+ * Classe necessaria alla lettura del file XML
+ * Vengo descritti i tag da prendere in considerazione, i valori da salvare, e passa tutto al validator per il controllo 
+ * di validitˆ.
+ * 
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
+ *
+ */
 
 public class ParserMainHandler implements ContentHandler{
 	
@@ -20,10 +30,13 @@ public class ParserMainHandler implements ContentHandler{
 		validator=v;
 	}
 	
+	// Inizializzazione delle variabili
 	public void startDocument() throws SAXException {
 		elementId=posX=posY=labelX=labelY=temp1=temp2=null;
 	}
 	
+
+	// Descriviamo i tag rilevanti ai fini della creazione della rete di Petri
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
 		
@@ -66,7 +79,7 @@ public class ParserMainHandler implements ContentHandler{
 			//System.out.println("\n\n\tDENTRO IL PARSERMAINHANDLER \t valore:" + temp1);
 		}
 		
-		if(inTrans && inPriority && inPriorityValue) temp1=content; //priorità della transizione
+		if(inTrans && inPriority && inPriorityValue) temp1=content; //prioritˆ della transizione
 	}
 
 	public void endElement(String uri, String localName, String name)

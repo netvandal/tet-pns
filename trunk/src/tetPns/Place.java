@@ -1,9 +1,9 @@
 package tetPns;
 
 /**
- * Place descriptor
+ * Descrittore dei Place
  * @author Michele Tameni, Alessio Troiano
- *
+ * @version 1.0
  */
 
 public class Place extends Element {

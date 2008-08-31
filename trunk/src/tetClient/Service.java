@@ -1,16 +1,20 @@
 package tetClient;
 
-/*
-Questa classe contiene vari metodi static di utilita' generale
-*/
+
 import java.io.*;
 import java.util.*;
 import java.text.*;
 
+
+/**
+ * Classe di servizio
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
+ */
 public class Service
 {
 	private final static String ERRORE_TASTIERA = "Sono stati riscontrati gravi problemi con la tastiera.\n";
-	private final static String EXIT_MSG = "Il programma verrà terminato!!!\n";
+	private final static String EXIT_MSG = "Il programma verrˆ terminato!!!\n";
 	private final static String STRINGA_VUOTA="Non è ammesso inserire stringhe vuote!!!";
 	private final static String RIPETI="Ripetere l'inserimento";
 	private final static String ERRORE_NUMERO = "La stringa inserita non e' nel formato numerico richiesto";

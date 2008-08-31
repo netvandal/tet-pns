@@ -2,6 +2,13 @@ package tetClient;
 
 import java.io.Serializable;
 
+
+/**
+ * Classe per la gestione dei Menù
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
+ */
+
 public class Menu implements Serializable 
 {
 	private static final long serialVersionUID = 1L;
