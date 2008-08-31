@@ -8,15 +8,22 @@ import tetPns.PetriNet;
 
 
 /**
- * This is the main class that parse a pnml for building a Petri Net Model
+ * Classe principale che si occupa di effettuare il parsing dei file PNML
+ * richiamando ParserMainHandler e il Validator.
  * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  *
  */
 public class Parser {
 	
 	XMLReader parser;
 	Validator validator;
-		
+	
+	/**
+	 * Costruttore della classe. 
+	 * Vengono creati e inizializzati tutti gli oggetti necessari al parsing.
+	 */
+	
 	public Parser() {
 		
 	    try {
@@ -30,6 +37,14 @@ public class Parser {
 	    parser.setContentHandler(new ParserMainHandler(validator));
 	}
 	
+	/**
+	 * 
+	 * Viene effettuato il parsing, e in caso di file valido, viene ritornata un oggetto PetriNet
+	 * 
+	 * @param toParse nome del file di cui effettuare il parsng
+	 * @return PetriNet ritorna l'oggetto della rete di petri descritta nel file
+	 * @return null in caso di eccezioni o invaliditˆ del file
+	 */
 	public PetriNet parsePetriNet(String toParse){
 		try{
 			parser.parse(toParse);

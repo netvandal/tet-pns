@@ -3,9 +3,9 @@ package tetPns;
 import java.util.Vector;
 
 /**
- * Transition Descriptor
+ * Descrittore Transizioni
  * @author Michele Tameni, Alessio Troiano
- *
+ * @version 1.0
  */
 public class Transition  extends Element{
 	

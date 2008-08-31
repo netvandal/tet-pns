@@ -10,7 +10,8 @@ import tetPns.*;
  * appena immessa. Controlla alcune caratteristiche
  * utili per una buona simulazione.
  * 
- * @author Alessio
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  */
 public class Validator {
 	
@@ -93,7 +94,7 @@ public class Validator {
 	}
 	
 	/**
-	 * Controlla l'esistenza e la validit‡ di tutti gli elementi
+	 * Controlla l'esistenza e la validità di tutti gli elementi
 	 * di un place
 	 * @throws InvalidFileException 
 	 */
@@ -103,20 +104,20 @@ public class Validator {
 		Place p=null;
 		int token=0;
 		try{
-			p=new Place(); //la quantit‡ di token di default Ë 0
+			p=new Place(); //la quantità di token di default è 0
 			if(elementId==null)
 				throw new InvalidFileException();
 			
 			p.setId(elementId);
-			System.out.println(elementId);
+			//System.out.println(elementId);
 			p.setCoordX(Math.round(Float.parseFloat(posX)));
 			//System.out.println("1");
 			p.setCoordY(Math.round(Float.parseFloat(posY)));
 			//System.out.println("2");
-			p.setLabelX(Math.round(Float.parseFloat(labelX))); // FIXME da controllare...è un label..perchè lo parso
+			p.setLabelX(Math.round(Float.parseFloat(labelX))); // FIXME 
 			//System.out.println("3");
 			p.setLabelY(Math.round(Float.parseFloat(labelY)));
-			System.out.println(nToken);
+			//System.out.println(nToken);
 			if((token = Integer.parseInt(nToken))>=0)
 				p.addToken(token);
 				
@@ -129,7 +130,7 @@ public class Validator {
 	}
 	
 	/**
-	 * Controlla l'esistenza e la validit‡ di tutti gli elementi
+	 * Controlla l'esistenza e la validità di tutti gli elementi
 	 * che compongono una transizione
 	 * 
 	 * @throws InvalidFileException
@@ -161,7 +162,7 @@ public class Validator {
 	}
 	
 	/**
-	 * Controlla l'esistenza e la validit‡ di tutti gli elementi
+	 * Controlla l'esistenza e la validità di tutti gli elementi
 	 * che compongono un arco
 	 * 
 	 * @throws InvalidFileException
@@ -180,11 +181,11 @@ public class Validator {
 		if(s==null || t== null)					
 			throw new InvalidFileException();
 		
-		//Se source Ë un posto allora target deve essere una transizione
+		//Se source è un posto allora target deve essere una transizione
 		if(s instanceof Place && !(t instanceof Transition))
 			throw new InvalidFileException();
 		
-		//Se source Ë una transizione allora target deve essere un posto
+		//Se source è una transizione allora target deve essere un posto
 		if(s instanceof Transition && !(t instanceof Place))
 			throw new InvalidFileException();
 		

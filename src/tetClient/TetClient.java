@@ -15,23 +15,41 @@ import tetPns.Transition;
 import tetServer.IDispenser;
 import tetServer.ISimulator;
 
+/**
+ * Classe principale del Client.
+ * Si occupa della gestione dell'interazione con l'utente e della gestione del workflow dell'applicazione.
+ * Gestisce la comunicazione con il server necessaria alla simulazione ed eventualmente al caricamento delle
+ * reti salvate in remoto.
+ * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
+ */
+
 
 public class TetClient {
-	
+	// creazione variabili per il menù
 	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale"};
 	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorit‡","Esci"};
 	
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
+	
+	// variabili necessarie alla simulazione
 	private ISimulator sim;
 	private IDispenser disp;
 	private PetriNet pn;
-	private GraphEditorTester graph;
+
+	// variabile per la gestione della finestra grafica
+	private GraphEditorTester graph; 
 	
+	/**
+	 * Costruttore.
+	 * Setup della connessione con il server, inizializzazione variabili
+	 */
 	private TetClient() {
 		try{
 			loadNetMenu = new Menu("Caricamento Rete",LOAD_NET_OPTION);
 			pn=null;
 			
+			// Localizzazione del registro RMI
 			Registry reg = LocateRegistry.getRegistry();
 			sim = (ISimulator) reg.lookup("SIMULATOR");
 			disp = (IDispenser) reg.lookup("DISPENSER");
@@ -49,6 +67,11 @@ public class TetClient {
 		}
 	}
 	
+	/**
+	 * Gestione caricamento rete di Petri
+	 * @throws IOException
+	 */
+	
 	private void loadNet() throws IOException{
 		boolean continua=true;
 		do{
@@ -58,7 +81,7 @@ public class TetClient {
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
 						if(pn==null)
-							System.out.println("\t\tAttenzione!!! Il file non Ë valido.");
+							System.out.println("\t\tAttenzione!!! Il file non è valido.");
 					} 
 					else {
 						System.out.println("\t\tIl file non esiste!!!");
@@ -87,10 +110,15 @@ public class TetClient {
 		}
 	}
 	
+	
+	
+	/**
+	 * Salva la rete sul server in un oggetto serializzato
+	 */
 	private void saveNet(){
 		try{
 			if(pn==null){
-				System.out.println("\nATTENZIONE!!! Non Ë stata caricata alcuna rete di Petri.");
+				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
 				return;
 			}
 			disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del file:"));
@@ -101,11 +129,14 @@ public class TetClient {
 		}
 	}
 	
+	/**
+	 * Gestisce la modifica della priorità delle transizioni
+	 */
 	private void changeTransitionPriority(){
 		int newPriority;
 		Transition t;
 		if(pn==null){
-			System.out.println("\nATTENZIONE!!! Non Ë stata caricata alcuna rete di Petri.");
+			System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
 			return;
 		}
 		Vector<Transition> transitions = pn.getTransitions();
@@ -125,7 +156,12 @@ public class TetClient {
 			System.out.println("Problemi con il server");
 		}
 	}
-	
+
+	/**
+	 * Gestisce l'interazione utile all'avanzamento dello stato della rete
+	 * @return true se è possibile proseguire la simulazione
+	 * @return false se non è possibile proseguire la simulazione (DeadLock o errori)
+	 */
 	private boolean oneStepBeyond(){
 		try{
 			Vector<Transition> trans = sim.getSelectableTransition();
@@ -170,10 +206,13 @@ public class TetClient {
 		return true;
 	}
 	
+	/**
+	 * Gestisce l'inizio della simulazione
+	 */
 	private void manageSimulation(){
 		try{
 			if(sim.getNet()==null){
-				System.out.println("\nATTENZIONE!!! Non Ë stata caricata alcuna rete di Petri.");
+				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
 				return;
 			}
 		}
@@ -187,16 +226,17 @@ public class TetClient {
         
 		boolean esci=false;
 		
-		/**
-		 * GUARDA CHE BELLO!!!
-		 * SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
-		 */
+		
+		//SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		while(!esci && oneStepBeyond())
 			esci = !Service.risposta("\nContinuare la simulazione ");
 
 		System.out.println("Fine della simulazione");
 	}
 	
+	/**
+	 * Interrompe la simulazione e interrompe la comunicazione con il server
+	 */
 	private void stopClient(){
 		try{
 			sim.stopSimulation();
@@ -208,6 +248,11 @@ public class TetClient {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * main
+	 * @param args
+	 */
 	
 	public static void main(String[] args) {
 		

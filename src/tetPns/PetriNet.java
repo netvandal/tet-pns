@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Vector;
 
 /**
- * This is the main class that enclose all the Petri net elements
+ * Classe principale che include tutti gli elementi della rete di Petri
  * @author Michele Tameni, Alessio Troiano
+ * @version 1.0
  */
 public class PetriNet implements Serializable{
 
