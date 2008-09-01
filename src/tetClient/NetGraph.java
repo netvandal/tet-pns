@@ -44,17 +44,6 @@ public class NetGraph extends PCanvas {
 	
 	public NetGraph(int width, int height, PetriNet pn) {
 		setPreferredSize(new Dimension(width, height));
-		
-		/*
-		 * Test, da eliminare
-		 */
-		
-		
-		//Parser myParser = new Parser();
-		//PetriNet pn = myParser.parsePetriNet("test.xml");
-		
-        // Initialize, and create a layer for the edges
-        // (always underneath the nodes)
 
 		getRoot().addChild(edgeLayer);
 		getCamera().addLayer(0, edgeLayer);
@@ -66,9 +55,6 @@ public class NetGraph extends PCanvas {
 
 		PPath node = null;
 		int totNode = 0;
-          // Create some random nodes
-		// Each node's attribute set has an ArrayList to store associated edges
-		// FIXME fa casino se gli id di place/transizioni sono uguali!
 		
 		// disegno tutti i places
 		for(Place place : pn.getPlaces()) {
@@ -118,8 +104,10 @@ public class NetGraph extends PCanvas {
 			
 			totNode++;
 		}
+		
 		int i;
 		PNode nodeTest = null;
+		
 		//disegno tutti gli archi:
 		for(Arc arc : pn.getArcs()) {
 			//arc.getInfo();
@@ -199,17 +187,27 @@ public class NetGraph extends PCanvas {
 	      	  //if(Math.sin(aDir)>0)  y+=15/Math.tan(Math.PI/2-aDir); else y-=15/Math.tan(Math.PI/2-aDir);
 	      	  //if(Math.cos(aDir)<0) x-=Math.tan(Math.PI/2-aDir)*5; else x+=Math.tan(Math.PI/2-aDir)*5-15;
 	    	  
-	    	  float angComp = (float) Math.atan(((float)largTrans) / ((float)altTrans) );
-	    	  //System.out.println("\nAngoComp : " + angComp);
+	    	  float angComp = (float) Math.atan2((float)largTrans,(float)altTrans);
+	    	  //angComp = (angComp + (float)Math.PI*2) % ((float)Math.PI*2);
+	    	  System.out.println("\nAngoComp : " + angComp);
+	    	 
 	    	  
-	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sopra (in Teoria!!!)
-	    		  y+=altTrans;
-	    		  x-=Math.tan(aDir)*altTrans/2;
+	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sotto
+	    		  y+=altTrans/2;
+	    		  x+=(altTrans/2)*Math.tan(aDir);
+	    		  //x-=altTrans/(2*Math.atan(aDir));
+	    	  } else if(aDir <= Math.PI-angComp && aDir >=angComp) { // lato dx
+	    		  x+=largTrans/2;
+	    		  y+=(largTrans/2)*Math.tan(Math.PI/2-aDir);
+	    	  } else if(aDir >= angComp-Math.PI && aDir <= -angComp) { //lato sx
+	    		  x-=largTrans/2;
+	    		  y-=(largTrans/2)*Math.tan(Math.PI/2-aDir);
+
+	    	  } else { // lato sopra
+	    		y-=altTrans/2;
+	    		x-=(altTrans/2)*Math.tan(aDir);
 	    	  }
-	    	  else if(aDir<=(2*Math.PI+angComp) && aDir>=(2*Math.PI-angComp)){ //Lato sx (in Teoria!!!)
-	    		  x-=largTrans;
-	    		  y+=Math.tan(Math.PI-aDir)*largTrans/2;
-	    	  }
+	    
 	    /*	  if((aDir<angComp && aDir<(Math.PI+angComp))) { // lato sx
 	    		  x-=15;
 	    		  y+=(Math.tan(aDir)*altTrans/2);

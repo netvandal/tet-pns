@@ -27,7 +27,7 @@ import tetServer.ISimulator;
 
 public class TetClient {
 	// creazione variabili per il menù
-	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale"};
+	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale", "Debug"};
 	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorit‡","Esci"};
 	
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
@@ -97,13 +97,17 @@ public class TetClient {
 				case 3:continua=false;break;
 					
 				default:System.out.println("Opzione non presente");break;
+				
+				case 4: 
+					Parser myParser = new Parser();
+					pn = myParser.parsePetriNet("test.xml");
 			}
 		}while(pn==null && continua);
 		
 		if(pn!=null){
 			//pn.getInfo();
 			sim.setNet(pn);
-			
+			System.out.println("Rete caricata correttamente.");
 			if(this.graph!=null)
 				this.graph.setVisible(false);
 			this.graph = new GraphEditorTester(pn);
