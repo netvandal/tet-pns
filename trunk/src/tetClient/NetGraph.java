@@ -26,39 +26,46 @@ import edu.umd.cs.piccolo.nodes.PPath;
 import edu.umd.cs.piccolo.nodes.PText;
 import edu.umd.cs.piccolox.util.PNodeLocator;
 
+/**
+ * Classe che disegna il grafico della rete di Petri
+ * @author michele
+ *
+ */
+
 public class NetGraph extends PCanvas {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
+	// suddivideo il disegno in layer
 	PLayer nodeLayer = getLayer();
 	PLayer edgeLayer = new PLayer();
 	PLayer labelLayer = new PLayer();
 	PLayer arrowLayer = new PLayer();
 	
+	//dimensioni della transizione
 	int largTrans = 30;
 	int altTrans = 10;
 	
+	//raggio del place
 	int ragPlace = 20;
 	
 	public NetGraph(int width, int height, PetriNet pn) {
 		setPreferredSize(new Dimension(width, height));
 
+		//aggiungo i vari layer alla finestra
 		getRoot().addChild(edgeLayer);
 		getCamera().addLayer(0, edgeLayer);
 		getRoot().addChild(labelLayer);
 		getCamera().addLayer(0,labelLayer);
 		getRoot().addChild(arrowLayer);
 		getCamera().addLayer(0,arrowLayer);
-		//Random random = new Random();
 
 		PPath node = null;
 		int totNode = 0;
 		
 		// disegno tutti i places
 		for(Place place : pn.getPlaces()) {
-			//place.getInfo();
 			node = PPath.createEllipse(place.getXCoord(), place.getYCoord(), ragPlace, ragPlace);
 			node.addAttribute("edges", new ArrayList());
 			node.addAttribute("id", place.getId());
@@ -84,7 +91,7 @@ public class NetGraph extends PCanvas {
 
 		// disegno tutte le transizioni
 		for(Transition transition : pn.getTransitions()) {
-			//transition.getInfo();
+
 			node = PPath.createRectangle(transition.getXCoord(), transition.getYCoord(), largTrans, altTrans);
 
 			node.addAttribute("edges", new ArrayList());
@@ -170,7 +177,16 @@ public class NetGraph extends PCanvas {
 	
 
 
-	
+	/**
+	 * Funzione complicatissima per il disegno delle frecce. DA NOTARE LO SFORZO
+	 * @param g2d il layer delle frecce
+	 * @param xCenter x inizio arco
+	 * @param yCenter y inizio arco
+	 * @param x x fine arco
+	 * @param y y fine artco
+	 * @param stroke 
+	 * @param type
+	 */
 	 public  void drawArrow(PLayer g2d, int xCenter, int yCenter, int x, int y, float stroke, String type) {
 		  float mx[] = new float[5], my[] = new float[5];
 	      double aDir=Math.atan2(xCenter-x,yCenter-y);
@@ -178,24 +194,20 @@ public class NetGraph extends PCanvas {
 	      p = PPath.createLine(x,y,xCenter,yCenter);
 	      int i1=12+(int)(stroke*2);
 	      int i2=6+(int)stroke;					
-	      //System.out.println("direzione:"+ aDir);
-	      //if(aDir>0 && y<yCenter) {9
+
+	      
 	      if(type.equals("place")) {
 	      	  x+=ragPlace/2*Math.sin(aDir);
 	    	  y+=ragPlace/2*Math.cos(aDir);
 	      }	else {
-	      	  //if(Math.sin(aDir)>0)  y+=15/Math.tan(Math.PI/2-aDir); else y-=15/Math.tan(Math.PI/2-aDir);
-	      	  //if(Math.cos(aDir)<0) x-=Math.tan(Math.PI/2-aDir)*5; else x+=Math.tan(Math.PI/2-aDir)*5-15;
-	    	  
+
 	    	  float angComp = (float) Math.atan2((float)largTrans,(float)altTrans);
-	    	  //angComp = (angComp + (float)Math.PI*2) % ((float)Math.PI*2);
 	    	  System.out.println("\nAngoComp : " + angComp);
 	    	 
 	    	  
 	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sotto
 	    		  y+=altTrans/2;
 	    		  x+=(altTrans/2)*Math.tan(aDir);
-	    		  //x-=altTrans/(2*Math.atan(aDir));
 	    	  } else if(aDir <= Math.PI-angComp && aDir >=angComp) { // lato dx
 	    		  x+=largTrans/2;
 	    		  y+=(largTrans/2)*Math.tan(Math.PI/2-aDir);
@@ -207,37 +219,9 @@ public class NetGraph extends PCanvas {
 	    		y-=altTrans/2;
 	    		x-=(altTrans/2)*Math.tan(aDir);
 	    	  }
-	    
-	    /*	  if((aDir<angComp && aDir<(Math.PI+angComp))) { // lato sx
-	    		  x-=15;
-	    		  y+=(Math.tan(aDir)*altTrans/2);
-		    	  System.out.println("Lato sx:  = " + aDir);
-
-	    	  } else if (aDir>angComp && aDir<(Math.PI-angComp)) {
-	    		  y+=5;
-	    		  x=(int) Math.tan(Math.PI-aDir);
-	    		  System.out.println("Lato sotto");
-	    	  } else if (aDir<angComp && aDir>(Math.PI+angComp)) {
-	    		  x+=15;
-	    		  y=(int) (Math.tan(aDir)*altTrans/2);
-	    		  System.out.println("Lato dx");
-	    	  } else {
-	    		  y-=15;
-	    		  x=(int) Math.tan(Math.PI-aDir);
-	    		  System.out.println("Lato sopra");
-
-	    	  }	    	  */
 	      }
-/*	      } else if( aDir>0 && y>yCenter) {
-	    	  x+=20*Math.cos(aDir);
-	    	  y-=20*Math.sin(aDir);
-	      } if(aDir<0 && y>yCenter) {
-	    	  x-=20*Math.cos(aDir);
-	    	  y-=20*Math.sin(aDir);
-	      } else if( aDir<0 && y<yCenter) {
-	    	  x-=20*Math.cos(aDir);
-	    	  y+=20*Math.sin(aDir);
-	      }*/
+	      
+	      
 	      mx[0]=x;
 	      my[0]=y;
 	      mx[1]=x+xCor(i1,aDir+.5);
