@@ -16,9 +16,9 @@ public class GraphEditorTester extends JFrame {
 
 	public GraphEditorTester(PetriNet pn) {
 		this.pnz = pn;
-		setTitle("Piccolo Graph Editor");
+		setTitle("T&TPnS Sim is fun... no, really!");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.graphEditor = new NetGraph(500, 500, pnz);
+		this.graphEditor = new NetGraph(900, 500, pnz);
 		getContentPane().add(graphEditor);
 		pack();
 		setVisible(true);

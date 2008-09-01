@@ -66,7 +66,7 @@ public class Validator {
 		//Controllo id tra place
 		for(int i=0;i<place.size();i++){	
 			pi=place.elementAt(i);
-			for(int j=(i+1);i<place.size();i++){
+			for(int j=(i+1);i<(place.size()-1);i++){
 				pj=place.elementAt(j);
 				if(pi.getId().equalsIgnoreCase(pj.getId()))
 					return false;
@@ -76,7 +76,7 @@ public class Validator {
 		//Controllo id tra transition
 		for(int i=0;i<trans.size();i++){	
 			ti=trans.elementAt(i);
-			for(int j=(i+1);i<trans.size();i++){
+			for(int j=(i+1);i<(trans.size()-1);i++){
 				tj=trans.elementAt(j);
 				if(ti.getId().equalsIgnoreCase(tj.getId()))
 					return false;
