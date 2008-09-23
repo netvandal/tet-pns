@@ -24,14 +24,16 @@ public class TetServer extends UnicastRemoteObject{
 	public static void main(String[] args)  {
 		try {
 			
-			Dispenser disp = new Dispenser();
-			Simulator sim = new Simulator();
+			IDispenser disp = new Dispenser();
+			ISimulator sim = new Simulator();
 			
-		
+			IDispenser dispStub  = (IDispenser) UnicastRemoteObject.exportObject(disp,0);
+			ISimulator simStub  = (ISimulator) UnicastRemoteObject.exportObject(sim,0);
+			
 			Registry r = LocateRegistry.getRegistry();
-			r.rebind("SIMULATOR", sim);
-			r.rebind("DISPENSER", disp);
-			
+			r.rebind("SIMULATOR", simStub);
+			r.rebind("DISPENSER", dispStub);
+			System.out.println("Server avviato correttamente... buona simulazione ;)");
 		}
 		// se c'è qualche errore di comunicazione
 		catch (RemoteException e) {

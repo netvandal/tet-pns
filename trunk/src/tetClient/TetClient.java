@@ -126,7 +126,8 @@ public class TetClient {
 				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
 				return;
 			}
-			disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del file:"));
+			if(disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del" )))
+				System.out.println("La marcatura è stata salvata correttamente.");
 		}
 		catch(Exception e){
 			System.out.println("Problemi in saveNet");
@@ -195,7 +196,7 @@ public class TetClient {
 			
 			if(sim.nextStep(transitionId[transitionChoice])) {
 				pn = sim.getNet();
-				this.graph.redraw();
+				this.graph.redraw(pn);
 			}
 			else{
 				System.out.println("\n\nErrore nello scatto della transizione" + transitionId[transitionChoice]);

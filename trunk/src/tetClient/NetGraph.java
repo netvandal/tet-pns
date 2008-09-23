@@ -202,7 +202,7 @@ public class NetGraph extends PCanvas {
 	      }	else {
 
 	    	  float angComp = (float) Math.atan2((float)largTrans,(float)altTrans);
-	    	  System.out.println("\nAngoComp : " + angComp);
+	    	  //System.out.println("\nAngoComp : " + angComp);
 	    	 
 	    	  
 	    	  if(aDir<=angComp && aDir>=(-angComp)){ //Lato sotto
