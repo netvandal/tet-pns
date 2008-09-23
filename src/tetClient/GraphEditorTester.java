@@ -33,10 +33,10 @@ public class GraphEditorTester extends JFrame {
 		setVisible(true);
 	}
 	
-	public void redraw() {
+	public void redraw(PetriNet pn) {
 		//System.out.println("redrawing");
 		getContentPane().remove(this.graphEditor);
-		this.graphEditor = new NetGraph(500, 500, pnz);
+		this.graphEditor = new NetGraph(500, 500, pn);
 		getContentPane().add(graphEditor);
 		setVisible(false);
 		this.repaint();

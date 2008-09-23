@@ -1,7 +1,7 @@
 javac tetServer/IDispenser.java tetServer/ISimulator.java
 javac tetServer/Dispenser.java tetServer/Simulator.java
 javac tetServer/TetServer.java
-rmic tetServer/Dispenser
-rmic tetServer/Simulator 
+rmic tetServer.Dispenser
+rmic tetServer.Simulator 
 
 #javac EUStatsClient.java
