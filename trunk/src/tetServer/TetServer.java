@@ -34,8 +34,12 @@ public class TetServer extends UnicastRemoteObject{
 			r.rebind("SIMULATOR", simStub);
 			r.rebind("DISPENSER", dispStub);
 			System.out.println("Server avviato correttamente... buona simulazione ;)");
+			System.out.println("Pubblicazione dei servizi eseguita con successo.\n" +
+					"E' ora possibile lanciare il programma client.\n" +
+					"BUONA SIMULAZIONE!!!");
+			
 		}
-		// se c'è qualche errore di comunicazione
+		// se c'Ë qualche errore di comunicazione
 		catch (RemoteException e) {
 			System.out.println("Errore di comunicazione " + e.toString());
 		}
