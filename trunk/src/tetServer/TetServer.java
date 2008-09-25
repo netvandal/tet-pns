@@ -39,7 +39,7 @@ public class TetServer extends UnicastRemoteObject{
 					"BUONA SIMULAZIONE!!!");
 			
 		}
-		// se c'è qualche errore di comunicazione
+		// se c'Ã¨ qualche errore di comunicazione
 		catch (RemoteException e) {
 			System.out.println("Errore di comunicazione " + e.toString());
 		}

@@ -84,20 +84,15 @@ public class Dispenser implements IDispenser, Serializable {
 	/**
 	 * Salva la rete di Petri come oggetto serializzato nell'archivio
 	 */
-	public boolean sendNet(PetriNet pn, String name) throws RemoteException {
+	public boolean sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException {
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		try{
 			File f1 = new File(REPOSITORY + File.separator + name + EXT);
 			
-			while(f1.exists()){
-				System.out.println("Il file esiste già!!! Si desidera sovrascriverlo? (y/n)");
-				if(input.readLine().equalsIgnoreCase("n")){
-					System.out.println("Inserire il nuovo nome: ");
-					f1 = new File(REPOSITORY + File.separator + input.readLine() + EXT);
-				}
-				else break;
-			}
+			if(f1.exists() && !overWrite)
+					return false;
 			
+			f1 = new File(REPOSITORY + File.separator + input.readLine() + EXT);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f1));
 			oos.writeObject(pn);
 			return true;

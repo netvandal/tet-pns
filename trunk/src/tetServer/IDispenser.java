@@ -25,10 +25,10 @@ public interface IDispenser extends Remote {
 	 * @param pn Rete di Petri
 	 * @param name Nome desiderato per il salvataggio
 	 * @return true in caso di successo
-	 * @return false in caso di problemi
+	 * @return false in caso il file salvato esista già
 	 * @throws RemoteException
 	 */
-	public boolean sendNet(PetriNet pn, String name) throws RemoteException;
+	public boolean sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException;
 
 	/**
 	 * Richiede una rete di petri
