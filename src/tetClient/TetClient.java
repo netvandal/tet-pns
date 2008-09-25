@@ -26,9 +26,9 @@ import tetServer.ISimulator;
 
 
 public class TetClient {
-	// creazione variabili per il menù
+	// creazione variabili per il menÔøΩ
 	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale"};
-	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorit‡","Esci"};
+	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorit√†","Esci"};
 	
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
 	
@@ -81,7 +81,7 @@ public class TetClient {
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
 						if(pn==null)
-							System.out.println("\t\tAttenzione!!! Il file non è valido.");
+							System.out.println("\t\tAttenzione!!! Il file non ÔøΩ valido.");
 					} 
 					else {
 						System.out.println("\t\tIl file non esiste!!!");
@@ -121,35 +121,43 @@ public class TetClient {
 	 * Salva la rete sul server in un oggetto serializzato
 	 */
 	private void saveNet(){
+		boolean overWrite=false;
 		try{
 			if(pn==null){
-				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+				System.out.println("\nATTENZIONE!!! Non √® stata caricata alcuna rete di Petri.");
 				return;
 			}
-			if(disp.sendNet(pn, Service.leggiStringa("Inserisci il nome del" )))
-				System.out.println("La marcatura è stata salvata correttamente.");
+			String name;
+			name=Service.leggiStringa("Inserisci il nome della rete:" );
+			while(!disp.sendNet(pn,name ,overWrite)){
+				overWrite=Service.risposta("Il file esiste gi√†!!! Si desidera sovrascriverlo?");
+				if(!overWrite)
+					name=Service.leggiStringa("Inserisci il nome della rete:" );
+			}
+			
+			System.out.println("La marcatura √® stata salvata correttamente.");
 		}
 		catch(Exception e){
-			System.out.println("Problemi in saveNet");
+			System.out.println("Problemi nel salvataggio della rete saveNet");
 			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * Gestisce la modifica della priorità delle transizioni
+	 * Gestisce la modifica della priorit√† delle transizioni
 	 */
 	private void changeTransitionPriority(){
 		int newPriority;
 		Transition t;
 		if(pn==null){
-			System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+			System.out.println("\nATTENZIONE!!! Non √® stata caricata alcuna rete di Petri.");
 			return;
 		}
 		Vector<Transition> transitions = pn.getTransitions();
 		for(int i=0;i<transitions.size();i++){
 			t=transitions.get(i);
-			if((newPriority=Service.leggiInt("Inserire la nuova priorit‡ per " + t.getId() + ":"))<0){
-				System.out.println("\nATTENZIONE!!! La priorit‡ deve essere positiva.");
+			if((newPriority=Service.leggiInt("Inserire la nuova priorit√† per " + t.getId() + ":"))<0){
+				System.out.println("\nATTENZIONE!!! La priorit√† deve essere positiva.");
 				i--;
 			}
 			else
@@ -165,8 +173,8 @@ public class TetClient {
 
 	/**
 	 * Gestisce l'interazione utile all'avanzamento dello stato della rete
-	 * @return true se è possibile proseguire la simulazione
-	 * @return false se non è possibile proseguire la simulazione (DeadLock o errori)
+	 * @return true se ÔøΩ possibile proseguire la simulazione
+	 * @return false se non ÔøΩ possibile proseguire la simulazione (DeadLock o errori)
 	 */
 	private boolean oneStepBeyond(){
 		try{
@@ -218,7 +226,7 @@ public class TetClient {
 	private void manageSimulation(){
 		try{
 			if(sim.getNet()==null){
-				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+				System.out.println("\nATTENZIONE!!! Non √® stata caricata alcuna rete di Petri.");
 				return;
 			}
 		}
