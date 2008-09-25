@@ -81,7 +81,7 @@ public class TetClient {
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
 						if(pn==null)
-							System.out.println("\t\tAttenzione!!! Il file non � valido.");
+							System.out.println("\t\tAttenzione!!! Il file non è valido.");
 					} 
 					else {
 						System.out.println("\t\tIl file non esiste!!!");
@@ -253,9 +253,14 @@ public class TetClient {
 	 */
 	private void stopClient(){
 		try{
+			boolean exit=true;
+			exit=Service.risposta("Sei sicuro di voler uscire? ");
+			if(!exit)return;
+			
 			sim.stopSimulation();
 			if(graph!=null)
 				this.graph.setVisible(false);
+			System.out.println("Termine del programma.");
 		}
 		catch(RemoteException e){
 			System.out.println("Problemi di connessione");
