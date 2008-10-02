@@ -27,39 +27,42 @@ public class Dispenser implements IDispenser, Serializable {
 	private static final String EXT = ".tetpns";
 	private static final String REPOSITORY = "repository";
 	
-	
+	private ClientMonitor cm = null;
 	private File repository;
 	
-	public Dispenser(){
+	public Dispenser(ClientMonitor cmon){
 		repository = new File(REPOSITORY);
 		if(!repository.exists())
 			repository.mkdir();
+		cm = cmon;
 	}
 	
 		
 	/**
 	 * Restituisce la rete di Petri voluta dal client
 	 */
-	public PetriNet getNet(String name) throws RemoteException {
+	public PetriNet getNet(String name, int id) throws RemoteException {
 		
 		if(!checkFileExtension(name)){
 			name = name + EXT;
 		}
-		
+		boolean error = false;
 		File [] fileInRepository = repository.listFiles();
 		try{
 			for(File f : fileInRepository){
 				if(f.getName().equalsIgnoreCase(name)){
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-					return (PetriNet) ois.readObject();
+					if(cm.addFileLock(id, name)) return (PetriNet) ois.readObject(); 
+					else {
+						error = true;
+					}
 				}
 			}
-			return null; //Non esiste alcuna rete con quel nome
 		}
 		catch(Exception e){
 			System.out.println("File error: " + e.toString());
-			return null;
 		}
+		return null;
 	}
 
 	
@@ -67,13 +70,14 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Presenta la lista di tutte le reti di Petri
 	 * presenti nell'archivio
 	 */
-	public String[] list() throws RemoteException {
+	public String[] list(int id) throws RemoteException {
 		
 		File[] fileInRepository = repository.listFiles();
 		Vector<String> fileName = new Vector<String>();
 		for(File f : fileInRepository){
 			if(!f.isDirectory()){
-				fileName.addElement(f.getName());
+				
+				if(!cm.checkLock(f.getName())) fileName.addElement(f.getName());
 			}
 		}
 		
@@ -84,20 +88,23 @@ public class Dispenser implements IDispenser, Serializable {
 	/**
 	 * Salva la rete di Petri come oggetto serializzato nell'archivio
 	 */
-	public boolean sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException {
+	public int sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException {
 		try{
+			if(name == null) {
+				return -3; // nome nullo non consentito!!!
+			}
 			File f1 = new File(REPOSITORY + File.separator + name + EXT);
 			if(f1.exists() && !overWrite)
-				return false;
+				return -1; // file esistente e sovrascrittura disabilitata
 			
 			f1 = new File(REPOSITORY + File.separator + name + EXT);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f1));
 			oos.writeObject(pn);
-			return true;
+			return 0; // ok file scritto
 		}
 		catch(Exception e){
 			System.out.println("File error: " + e.toString());
-			return false;
+			return -2; // errori strambi
 		}
 	}
 	
@@ -113,6 +120,13 @@ public class Dispenser implements IDispenser, Serializable {
 		fileExtension = fileName.substring(lastPointIndex);
 		
 		return fileExtension.equalsIgnoreCase(EXT);
+	}
+	
+	/**
+	 * Rimuove i blocchi dai file
+	 */
+	public void removeLock(int id) throws RemoteException{
+		cm.removeFileLock(id);
 	}
 
 }

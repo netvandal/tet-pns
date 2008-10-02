@@ -26,7 +26,7 @@ public interface ISimulator extends Remote {
 	 * @return false in caso di problemi
 	 * @throws RemoteException
 	 */
-	public boolean setNet(PetriNet net)	    throws RemoteException;
+	public boolean setNet(PetriNet net, int id)	    throws RemoteException;
 	
 	/**
 	 * Genera il passaggio alla marcatura successiva 
@@ -35,25 +35,37 @@ public interface ISimulator extends Remote {
 	 * @return false in caso di problemi
 	 * @throws RemoteException
 	 */
-	public boolean nextStep(String transId)	    throws RemoteException;
+	public boolean nextStep(String transId, int id)	    throws RemoteException;
 
 	/**
 	 * Ferma la simulazione
 	 * @throws RemoteException
 	 */
-	public boolean stopSimulation()	    throws RemoteException;
+	public boolean stopSimulation(int id)	    throws RemoteException;
 	
 	/**
 	 * Ritorna un vettore contenente le transizioni selezionabili
 	 * @return Vector delle transizioni selezionabili
 	 * @throws RemoteException
 	 */
-	public Vector<Transition> getSelectableTransition() throws RemoteException;
+	public Vector<Transition> getSelectableTransition(int id) throws RemoteException;
 	
 	/**
 	 * Ritorna la  marcatura corrente della rete di Petri
 	 * @return PetriNet  marcatura corrente della rete di Petri
 	 * @throws RemoteException
 	 */
-	public PetriNet getNet() throws RemoteException;
+	public PetriNet getNet(int id) throws RemoteException;
+	
+	
+	/**
+	 * Aggiunge un clientId alla lista dei client attivi
+	 */
+	public boolean addClient(int id) throws RemoteException;
+	
+	
+	/**
+	 * Riceve l'heartbeat dal client 
+	 */
+	public boolean imAlive(int id) throws RemoteException;
 }
