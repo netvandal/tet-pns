@@ -14,8 +14,8 @@ import java.text.*;
 public class Service
 {
 	private final static String ERRORE_TASTIERA = "Sono stati riscontrati gravi problemi con la tastiera.\n";
-	private final static String EXIT_MSG = "Il programma verrˆ terminato!!!\n";
-	private final static String STRINGA_VUOTA="Non è ammesso inserire stringhe vuote!!!";
+	private final static String EXIT_MSG = "Il programma verrï¿½ terminato!!!\n";
+	private final static String STRINGA_VUOTA="Non ï¿½ ammesso inserire stringhe vuote!!!";
 	private final static String RIPETI="Ripetere l'inserimento";
 	private final static String ERRORE_NUMERO = "La stringa inserita non e' nel formato numerico richiesto";
 	private final static String MESS_LIMITI = "Attenzione i valori ammessi sono nell'intervallo: ";
@@ -193,12 +193,11 @@ public class Service
 		 return scelto;
 	 }
 
-  	public static int estraiIntero(int min, int max)
+  	public static int estraiIntero()
 	{
-  		int range = max + 1 - min;
-  		int casual = rand.nextInt(range);
+  		int casual = rand.nextInt();
   		
-  		return casual + min;
+  		return casual;
 	}
 	
 	public static double estraiDouble(double min, double max)

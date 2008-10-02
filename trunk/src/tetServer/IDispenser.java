@@ -17,26 +17,32 @@ public interface IDispenser extends Remote {
 	/**
 	 * Restituisce la lista delle reti disponibili
 	 * @return String lista delle reti di petri disponibili
+	 * @param id del client
 	 */
-	public String[] list() throws RemoteException;
+	public String[] list(int id) throws RemoteException;
 
 	/**
 	 * Salva un oggetto PetriNet serializzato nel repository
 	 * @param pn Rete di Petri
 	 * @param name Nome desiderato per il salvataggio
 	 * @return true in caso di successo
-	 * @return false in caso il file salvato esista già
+	 * @return false in caso il file salvato esista giï¿½
 	 * @throws RemoteException
 	 */
-	public boolean sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException;
+	public int sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException;
 
 	/**
 	 * Richiede una rete di petri
 	 * @param nome Nome della rete di Petri da Caricare
 	 * @return PetriNet la rete di Petri desiderata
-	 * @throws RemoteException
+	 * @throws RemoteException, FileLockedException
 	 */
-	public PetriNet getNet(String nome) throws RemoteException;
-
+	public PetriNet getNet(String nome, int id) throws RemoteException;
+	
+	/**
+	 * Rimuove il lock sui file
+	 * @param id Id del client
+	 */
+	public void removeLock(int id) throws RemoteException;
 	
 }

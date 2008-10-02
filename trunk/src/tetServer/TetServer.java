@@ -16,16 +16,22 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class TetServer extends UnicastRemoteObject{
 
-
+	private static ClientMonitor cm = null;
+	private static Stethoscope s=null;
+	
 	protected TetServer() throws RemoteException {
 		super();
+		cm=new ClientMonitor();
+		s=new Stethoscope(cm);
+		s.start();
 	}
 
 	public static void main(String[] args)  {
 		try {
+			new TetServer();
 			
-			IDispenser disp = new Dispenser();
-			ISimulator sim = new Simulator();
+			IDispenser disp = new Dispenser(cm);
+			ISimulator sim = new Simulator(cm);
 			
 			IDispenser dispStub  = (IDispenser) UnicastRemoteObject.exportObject(disp,0);
 			ISimulator simStub  = (ISimulator) UnicastRemoteObject.exportObject(sim,0);
