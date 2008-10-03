@@ -4,7 +4,7 @@ import tetServer.ISimulator;
 
 public class ClientHeart extends Thread  {
 
-	final static int SLEEPTIME =  10000; // 10 secondi
+	final static int SLEEPTIME =  2000; // 2 secondi
 	
 	ISimulator sim = null;
 	int id;

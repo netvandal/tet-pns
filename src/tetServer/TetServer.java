@@ -39,7 +39,7 @@ public class TetServer extends UnicastRemoteObject{
 			Registry r = LocateRegistry.getRegistry();
 			r.rebind("SIMULATOR", simStub);
 			r.rebind("DISPENSER", dispStub);
-			System.out.println("Server avviato correttamente... buona simulazione ;)");
+			System.out.println("Server avviato correttamente... ;)");
 			System.out.println("Pubblicazione dei servizi eseguita con successo.\n" +
 					"E' ora possibile lanciare il programma client.\n" +
 					"BUONA SIMULAZIONE!!!");

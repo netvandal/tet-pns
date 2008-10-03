@@ -7,22 +7,28 @@ import java.util.Set;
 
 public class ClientMonitor{ 
 	
-	final static private int DEATHTHRESHOLD=300000; //5 minuti
+	final static private long DEATH_THRESHOLD=300000; //5 minuti
+	final static private long DEATH_THRESHOLD_DEBUG=15000; //15 secondi
 	
-	private HashMap<Integer, String> fileLockList = new HashMap<Integer, String>();
-	private HashMap<Integer, Long> liveClientList = new HashMap<Integer, Long>();
+	private HashMap<Integer, String> fileLockList = null;
+	private HashMap<Integer, Long> liveClientList = null;
 	
 	public ClientMonitor() {
-		
+		fileLockList = new HashMap<Integer, String>();
+		liveClientList = new HashMap<Integer, Long>();
 	}
 	
 	public void clientGarbage() {
 		Set set = liveClientList.entrySet();
 		Iterator i = set.iterator();
-
+		long lastBeatTime;
+		
 	    while(i.hasNext()){
 	      Map.Entry me = (Map.Entry)i.next();
-	      if((Long.parseLong(me.getValue().toString())-System.nanoTime())>DEATHTHRESHOLD) {
+	      lastBeatTime=(System.nanoTime()-Long.parseLong(me.getValue().toString()))/1000000;
+	      //System.out.println("Client: " + me.getKey().toString() + " Tempo di risposta:" + lastBeatTime);
+	      if(lastBeatTime>DEATH_THRESHOLD_DEBUG) {
+	    	  //System.out.println("Il client " + me.getKey() + " è morto!!!");
 	    	  removeFileLock(Integer.parseInt((me.getKey().toString())));
 	    	  liveClientList.remove(me.getKey());
 	    	  
@@ -47,7 +53,7 @@ public class ClientMonitor{
 		Iterator i = set.iterator();
 		
 		if(!i.hasNext()){
-			System.out.println("Lock file: "+ fileName);
+			//System.out.println("Lock file: "+ fileName);
 			fileLockList.put(id, fileName);
 			return true;
 		}
@@ -61,6 +67,7 @@ public class ClientMonitor{
 	
 	public boolean addClient(int id) {
 		liveClientList.put(id, System.nanoTime());
+		//System.out.println("Aggiornato heartbeat per il client " + id + " " + System.nanoTime());
 		return true;
 	}
 	

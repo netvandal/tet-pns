@@ -18,10 +18,10 @@ import tetPns.Transition;
  */
 public class Simulator implements ISimulator, Serializable {
 
-	HashMap<Integer, PetriNet> pList =  null;
-	ClientMonitor cm = null;
+	private static HashMap<Integer, PetriNet> pList =  null;
+	private static ClientMonitor cm = null;
 	
-	public Simulator(ClientMonitor cmon) {
+	public  Simulator(ClientMonitor cmon) {
 		pList=new HashMap<Integer, PetriNet>();
 		cm = cmon;
 	}
@@ -74,9 +74,7 @@ public class Simulator implements ISimulator, Serializable {
 	
 	
 	public boolean imAlive(int id) throws RemoteException {
-		cm.addClient(id);
-		//System.out.println("Aggiornato heartbeat per il client " + id + " " + System.nanoTime() +"\n ");
-		return true;
+		return cm.addClient(id);
 	}
 
 }
