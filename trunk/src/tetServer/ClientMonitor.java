@@ -18,7 +18,7 @@ public class ClientMonitor{
 		liveClientList = new HashMap<Integer, Long>();
 	}
 	
-	public void clientGarbage() {
+	public synchronized void clientGarbage() {
 		Set set = liveClientList.entrySet();
 		Iterator i = set.iterator();
 		long lastBeatTime;
@@ -30,25 +30,27 @@ public class ClientMonitor{
 	      if(lastBeatTime>DEATH_THRESHOLD_DEBUG) {
 	    	  //System.out.println("Il client " + me.getKey() + " è morto!!!");
 	    	  removeFileLock(Integer.parseInt((me.getKey().toString())));
-	    	  liveClientList.remove(me.getKey());
+	    	  //liveClientList.remove(me.getKey());
+	    	  i.remove();
 	    	  
 	      }
 	    }
 	}
 	
-	public void removeFileLock(int id) {
+	public synchronized void removeFileLock(int id) {
 		Set set = fileLockList.entrySet();
 		Iterator i = set.iterator();
 
 	    while(i.hasNext()){
 	      Map.Entry me = (Map.Entry)i.next();
 	      if(Integer.parseInt((me.getKey().toString()))==id) {
-	    	  fileLockList.remove(me.getKey());	  
+	    	  //fileLockList.remove(me.getKey());
+	    	  i.remove();
 	      }
 	    }		
 	}
 	
-	public boolean addFileLock(int id, String fileName) {
+	public synchronized boolean addFileLock(int id, String fileName) {
 		Set set = fileLockList.entrySet();
 		Iterator i = set.iterator();
 		
@@ -60,24 +62,31 @@ public class ClientMonitor{
 		
 	    while(i.hasNext()){
 	      Map.Entry me = (Map.Entry)i.next();
-	      if(me.getValue().toString().equals(fileName)) return false; 
+	      if(me.getValue().toString().equals(fileName)){
+	    	  fileLockList.put(id,fileName);
+	    	  return true;
+	      }   
 	    } 
-		return true;	
+		return false;	
 	}
 	
-	public boolean addClient(int id) {
+	public synchronized boolean addClient(int id) {
 		liveClientList.put(id, System.nanoTime());
 		//System.out.println("Aggiornato heartbeat per il client " + id + " " + System.nanoTime());
 		return true;
 	}
 	
-	public boolean getClient(int id) {
+	public synchronized void removeClient(int id){
+		liveClientList.remove(id);
+	}
+	
+	public synchronized boolean getClient(int id) {
 		if(liveClientList.get(id)!=null)
 			return true;
 		return false;
 	}
 
-	public boolean checkLock(String fileName) {
+	public synchronized boolean checkLock(String fileName) {
 		Set set = fileLockList.entrySet();
 		Iterator i = set.iterator();
 

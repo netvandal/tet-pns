@@ -42,7 +42,8 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Restituisce la rete di Petri voluta dal client
 	 */
 	public PetriNet getNet(String name, int id) throws RemoteException {
-		
+		System.out.println("ID Client: " + id);
+		System.out.println("Nome file: " + name);
 		if(!checkFileExtension(name)){
 			name = name + EXT;
 		}
@@ -52,7 +53,10 @@ public class Dispenser implements IDispenser, Serializable {
 			for(File f : fileInRepository){
 				if(f.getName().equalsIgnoreCase(name)){
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-					if(cm.addFileLock(id, name)) return (PetriNet) ois.readObject(); 
+					if(cm.addFileLock(id, name)){
+						System.out.println("Lock Aggiunto!!!");
+						return (PetriNet) ois.readObject(); 
+					}
 					else {
 						error = true;
 					}
@@ -70,7 +74,7 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Presenta la lista di tutte le reti di Petri
 	 * presenti nell'archivio
 	 */
-	public String[] list(int id) throws RemoteException {
+	public String[] list() throws RemoteException {
 		
 		File[] fileInRepository = repository.listFiles();
 		Vector<String> fileName = new Vector<String>();
