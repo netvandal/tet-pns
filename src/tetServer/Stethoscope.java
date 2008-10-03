@@ -15,11 +15,12 @@ public class Stethoscope extends Thread{
 		try {
 			while(true) {
 				Thread.sleep(SLEEPTIME_DEBUG);
-				System.out.println("\t\tCLIENT GARBAGE\n");
+				//System.out.println("\t\tCLIENT GARBAGE\n");
 				cm.clientGarbage();
 			}
 		} catch (Exception e ) {
 			System.out.println("\nImpossibile controllare client attivi, si consiglia di riavviare il server.\n");
+			e.printStackTrace();
 		}
 			
 	}

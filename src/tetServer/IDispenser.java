@@ -17,9 +17,8 @@ public interface IDispenser extends Remote {
 	/**
 	 * Restituisce la lista delle reti disponibili
 	 * @return String lista delle reti di petri disponibili
-	 * @param id del client
 	 */
-	public String[] list(int id) throws RemoteException;
+	public String[] list() throws RemoteException;
 
 	/**
 	 * Salva un oggetto PetriNet serializzato nel repository

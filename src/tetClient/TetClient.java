@@ -107,9 +107,11 @@ public class TetClient {
 					else {
 						System.out.println("\t\tIl file non esiste!!!");
 					}break;
-				case 2: String[] file = disp.list(id);
+				case 2: String[] file = disp.list();
 					if(file.length!=0){
 						repositoryMenu = new Menu("Repository",file);
+						System.out.println("ID Client: " + id);
+						System.out.println("Nome file: " + file[repositoryMenu.scelta()-1]);
 						pn = disp.getNet(file[repositoryMenu.scelta()-1], id);
 						remoteFile=true;
 					}
@@ -125,6 +127,7 @@ public class TetClient {
 					Parser myParser = new Parser();
 					pn = myParser.parsePetriNet("test.xml");
 			}
+			if(pn==null)System.out.println("Problemi col caricamento della rete.");
 		}while(pn==null && continua);
 		
 		if(pn!=null){
