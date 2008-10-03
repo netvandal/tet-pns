@@ -43,7 +43,7 @@ public class Parser {
 	 * 
 	 * @param toParse nome del file di cui effettuare il parsng
 	 * @return PetriNet ritorna l'oggetto della rete di petri descritta nel file
-	 * @return null in caso di eccezioni o invalidità del file
+	 * @return null in caso di eccezioni o invalidit√† del file
 	 */
 	public PetriNet parsePetriNet(String toParse){
 		try{
@@ -52,6 +52,7 @@ public class Parser {
 			return validator.getPetriNet();
 		}
 		catch(SAXException e){
+			System.out.println("ATTENZIONE!!! File non valido.");
 			return null;
 		}
 		catch(Exception e){

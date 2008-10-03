@@ -27,7 +27,7 @@ public class Dispenser implements IDispenser, Serializable {
 	private static final String EXT = ".tetpns";
 	private static final String REPOSITORY = "repository";
 	
-	private ClientMonitor cm = null;
+	private static ClientMonitor cm = null;
 	private File repository;
 	
 	public Dispenser(ClientMonitor cmon){
@@ -76,7 +76,6 @@ public class Dispenser implements IDispenser, Serializable {
 		Vector<String> fileName = new Vector<String>();
 		for(File f : fileInRepository){
 			if(!f.isDirectory()){
-				
 				if(!cm.checkLock(f.getName())) fileName.addElement(f.getName());
 			}
 		}
@@ -90,8 +89,8 @@ public class Dispenser implements IDispenser, Serializable {
 	 */
 	public int sendNet(PetriNet pn, String name, boolean overWrite) throws RemoteException {
 		try{
-			if(name == null) {
-				return -3; // nome nullo non consentito!!!
+			if(name == null || name.equalsIgnoreCase("")) {
+				return -3; // nome nullo o vuoto non consentito!!!
 			}
 			File f1 = new File(REPOSITORY + File.separator + name + EXT);
 			if(f1.exists() && !overWrite)
