@@ -115,6 +115,7 @@ public class TetClient {
 						//System.out.println("Nome file: " + file[repositoryMenu.scelta()-1]);
 						pn = disp.getNet(file[repositoryMenu.scelta()-1], id);
 						remoteFile=true;
+						if(pn==null)System.out.println("Problemi col caricamento della rete.");
 					}
 					else
 						System.out.println("Non ci sono reti nel Repository");
@@ -128,7 +129,6 @@ public class TetClient {
 					Parser myParser = new Parser();
 					pn = myParser.parsePetriNet("test.xml");
 			}
-			if(pn==null)System.out.println("Problemi col caricamento della rete.");
 		}while(pn==null && continua);
 		
 		if(pn!=null){
@@ -168,13 +168,12 @@ public class TetClient {
 				if(check==-2) {
 					System.out.println("\nIl server non è in grado di salvare la rete.");
 					error=true;
+					break;
 				}
 				if(check==-3) {
 					System.out.println("\nDevi inserire un nome di file valido.");
 				}
-
-
-			} while(check!=0 && !error);
+			} while(check!=0);
 			
 			if(!error)System.out.println("La marcatura è stata salvata correttamente.");
 		}
@@ -292,7 +291,7 @@ public class TetClient {
 				disp.removeLock(id);
 			}
 			sim.stopSimulation(id);
-			
+			pn=null;
 		} catch(RemoteException e){
 			System.out.println("Problemi di connessione");
 			e.printStackTrace();
@@ -305,7 +304,8 @@ public class TetClient {
 	 * @throws RemoteException 
 	 */
 	private void stopClient() throws RemoteException{
-		sim.stopSimulation(id);	
+		sim.stopSimulation(id);
+		sim.deleteClient(id);
 		if(graph!=null)
 			this.graph.setVisible(false);
 		System.out.println("Termine del programma.");
@@ -315,7 +315,6 @@ public class TetClient {
 	 * main
 	 * @param args
 	 */
-	
 	public static void main(String[] args) {
 		
 		

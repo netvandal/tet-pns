@@ -60,9 +60,19 @@ public interface ISimulator extends Remote {
 	
 	/**
 	 * Aggiunge un clientId alla lista dei client attivi
+	 * @param id
+	 * @return true se l'operazioine è andata a buon fine, false altrimenti
+	 * @throws RemoteException
 	 */
 	public boolean addClient(int id) throws RemoteException;
 	
+	/**
+	 * Elimina un client dalla lista dei client vivi
+	 * @param id
+	 * @return true se l'operazione è andata a buon fine, false altrimenti
+	 * @throws RemoteException
+	 */
+	public boolean deleteClient(int id) throws RemoteException;
 	
 	/**
 	 * Riceve l'heartbeat dal client 

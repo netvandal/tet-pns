@@ -42,8 +42,8 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Restituisce la rete di Petri voluta dal client
 	 */
 	public PetriNet getNet(String name, int id) throws RemoteException {
-		System.out.println("ID Client: " + id);
-		System.out.println("Nome file: " + name);
+		//System.out.println("ID Client: " + id);
+		//System.out.println("Nome file: " + name);
 		boolean error = false;
 		File [] fileInRepository = repository.listFiles();
 		try{
@@ -51,7 +51,7 @@ public class Dispenser implements IDispenser, Serializable {
 				if(f.getName().equalsIgnoreCase(name)){
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 					if(cm.addFileLock(id, name)){
-						System.out.println("Lock Aggiunto!!!");
+						//System.out.println("Lock Aggiunto!!!");
 						return (PetriNet) ois.readObject(); 
 					}
 					else {
