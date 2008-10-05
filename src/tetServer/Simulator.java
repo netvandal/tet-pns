@@ -56,7 +56,7 @@ public class Simulator implements ISimulator, Serializable {
 	public boolean stopSimulation(int id) throws RemoteException {
 		pList.remove(id);
 		cm.removeFileLock(id);
-		cm.removeClient(id);
+		//cm.removeClient(id);
 		System.gc();
 		return true;
 	}
@@ -72,6 +72,9 @@ public class Simulator implements ISimulator, Serializable {
 		return false;
 	} 
 	
+	public boolean deleteClient(int id) throws RemoteException {
+		return cm.removeClient(id);
+	}
 	
 	public boolean imAlive(int id) throws RemoteException {
 		return cm.addClient(id);
