@@ -44,9 +44,6 @@ public class Dispenser implements IDispenser, Serializable {
 	public PetriNet getNet(String name, int id) throws RemoteException {
 		System.out.println("ID Client: " + id);
 		System.out.println("Nome file: " + name);
-		if(!checkFileExtension(name)){
-			name = name + EXT;
-		}
 		boolean error = false;
 		File [] fileInRepository = repository.listFiles();
 		try{
