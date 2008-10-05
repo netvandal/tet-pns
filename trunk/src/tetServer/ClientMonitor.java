@@ -10,14 +10,25 @@ public class ClientMonitor{
 	final static private long DEATH_THRESHOLD=300000; //5 minuti
 	final static private long DEATH_THRESHOLD_DEBUG=15000; //15 secondi
 	
+	//Lista dei file bloccati
 	private HashMap<Integer, String> fileLockList = null;
+	
+	//Lista dei client ancora "vivi"
 	private HashMap<Integer, Long> liveClientList = null;
 	
+	/**
+	 * Costruttore della classe ClientMonitor
+	 */
 	public ClientMonitor() {
 		fileLockList = new HashMap<Integer, String>();
 		liveClientList = new HashMap<Integer, Long>();
 	}
 	
+	/**
+	 * Controlla che l'ultimo heartbeat del client sia arrivato entro il
+	 * DEATH_THRESHOLD. Se questo non avviene il client viene eliminato
+	 * dal liveClientList
+	 */
 	public synchronized void clientGarbage() {
 		Set set = liveClientList.entrySet();
 		Iterator i = set.iterator();
@@ -37,64 +48,78 @@ public class ClientMonitor{
 	    }
 	}
 	
-	public synchronized void removeFileLock(int id) {
-		Set set = fileLockList.entrySet();
-		Iterator i = set.iterator();
-
-	    while(i.hasNext()){
-	      Map.Entry me = (Map.Entry)i.next();
-	      if(Integer.parseInt((me.getKey().toString()))==id) {
-	    	  //fileLockList.remove(me.getKey());
-	    	  i.remove();
-	      }
-	    }		
-	}
-	
-	public synchronized boolean addFileLock(int id, String fileName) {
-		Set set = fileLockList.entrySet();
-		Iterator i = set.iterator();
-		
-		if(!i.hasNext()){
-			//System.out.println("Lock file: "+ fileName);
-			fileLockList.put(id, fileName);
+	/**
+	 * Elimina il file bloccato dal client specificato da id dalla
+	 * lista dei file bloccati. Il file sarà quindi disponibile
+	 * ad altri client.
+	 * @param id
+	 * @return true se la rimozione va a buon fine, false in caso di errori
+	 */
+	public synchronized boolean removeFileLock(int id) {
+		if(fileLockList.containsKey(id)){
+			fileLockList.remove(id);
 			return true;
 		}
-		
-	    while(i.hasNext()){
-	      Map.Entry me = (Map.Entry)i.next();
-	      if(me.getValue().toString().equals(fileName)){
-	    	  fileLockList.put(id,fileName);
-	    	  return true;
-	      }   
-	    } 
-		return false;	
+		return false;
 	}
 	
+	/**
+	 * Aggiunge il file specificato da fileName alla lista dei file bloccati.
+	 * @param id
+	 * @param fileName
+	 * @return true se l'operazione va a buon fine, false altrimenti
+	 */
+	public synchronized boolean addFileLock(int id, String fileName) {
+		try{
+			fileLockList.put(id, fileName);
+			return true;
+		}catch(NullPointerException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Aggiunge un client alla lista dei client vivi
+	 * @param id
+	 * @return true se l'operazione va a buon fine, false altrimenti
+	 */
 	public synchronized boolean addClient(int id) {
 		liveClientList.put(id, System.nanoTime());
 		//System.out.println("Aggiornato heartbeat per il client " + id + " " + System.nanoTime());
 		return true;
 	}
 	
-	public synchronized void removeClient(int id){
-		liveClientList.remove(id);
+	/**
+	 * Elimina un client dalla lista dei client vivi
+	 * @param id
+	 */
+	public synchronized boolean removeClient(int id){
+		try{
+			liveClientList.remove(id);
+			return true;
+		}catch(NullPointerException e){
+			return false;
+		}
 	}
 	
+	/**
+	 * Controlla se la lista dei client vivi contiene il client
+	 * specificato
+	 * @param id
+	 * @return true se il client è vivo, false altrimenti
+	 */
 	public synchronized boolean getClient(int id) {
-		if(liveClientList.get(id)!=null)
-			return true;
-		return false;
+		return liveClientList.containsKey(id);
 	}
 
+	/**
+	 * Controlla se il file specificato con fileName è presente nella
+	 * lista dei file bloccati.
+	 * @param fileName
+	 * @return true se il file è bloccato, false altrimenti
+	 */
 	public synchronized boolean checkLock(String fileName) {
-		Set set = fileLockList.entrySet();
-		Iterator i = set.iterator();
-
-	    while(i.hasNext()){
-	      Map.Entry me = (Map.Entry)i.next();
-	      if(me.getValue().toString().equals(fileName)) return true;
-	    } 
-		return false;
+		return fileLockList.containsValue(fileName);
 	}
 	
 }

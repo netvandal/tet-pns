@@ -33,6 +33,7 @@ public class TetClient {
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
 	
 	// variabili necessarie alla simulazione
+	private ClientHeart beat;
 	private ISimulator sim;
 	private IDispenser disp;
 	private PetriNet pn;
@@ -69,7 +70,7 @@ public class TetClient {
 				System.exit(1);
 			}
 			
-            ClientHeart beat = new ClientHeart(sim, id);
+            beat = new ClientHeart(sim, id);
             beat.start();
 			
 		}
@@ -110,8 +111,8 @@ public class TetClient {
 				case 2: String[] file = disp.list();
 					if(file.length!=0){
 						repositoryMenu = new Menu("Repository",file);
-						System.out.println("ID Client: " + id);
-						System.out.println("Nome file: " + file[repositoryMenu.scelta()-1]);
+						//System.out.println("ID Client: " + id);
+						//System.out.println("Nome file: " + file[repositoryMenu.scelta()-1]);
 						pn = disp.getNet(file[repositoryMenu.scelta()-1], id);
 						remoteFile=true;
 					}
@@ -290,7 +291,7 @@ public class TetClient {
 				remoteFile=false;
 				disp.removeLock(id);
 			}
-			//sim.stopSimulation(id);
+			sim.stopSimulation(id);
 			
 		} catch(RemoteException e){
 			System.out.println("Problemi di connessione");
@@ -322,7 +323,6 @@ public class TetClient {
 		
 		try {
             TetClient tc = new TetClient();
-
             tc.mainMenu = new Menu("Menu Principale",MAIN_MENU_OPTION);
             do{
             	switch(tc.mainMenu.scelta()){

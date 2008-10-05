@@ -22,7 +22,7 @@ public class ClientHeart extends Thread  {
 				Thread.sleep(SLEEPTIME);
 			}
 		} catch ( Exception e) {
-			 System.out.println("Errore di comunicazione con il server.\n Chiusura del programma.");
+			 System.out.println("\n\nErrore di comunicazione con il server.\n Termine del programma.");
 			 System.exit(1);
 		}
 	}
