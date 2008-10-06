@@ -44,19 +44,13 @@ public class Dispenser implements IDispenser, Serializable {
 	public PetriNet getNet(String name, int id) throws RemoteException {
 		//System.out.println("ID Client: " + id);
 		//System.out.println("Nome file: " + name);
-		boolean error = false;
 		File [] fileInRepository = repository.listFiles();
 		try{
 			for(File f : fileInRepository){
 				if(f.getName().equalsIgnoreCase(name)){
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-					if(cm.addFileLock(id, name)){
-						//System.out.println("Lock Aggiunto!!!");
+					if(cm.addFileLock(id, name))
 						return (PetriNet) ois.readObject(); 
-					}
-					else {
-						error = true;
-					}
 				}
 			}
 		}
@@ -96,6 +90,9 @@ public class Dispenser implements IDispenser, Serializable {
 			File f1 = new File(REPOSITORY + File.separator + name + EXT);
 			if(f1.exists() && !overWrite)
 				return -1; // file esistente e sovrascrittura disabilitata
+			
+			if(f1.exists() && overWrite && cm.checkLock(name))
+				return -4; //File soggetto a lock
 			
 			f1 = new File(REPOSITORY + File.separator + name + EXT);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f1));

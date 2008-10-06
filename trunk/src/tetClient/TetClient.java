@@ -160,18 +160,21 @@ public class TetClient {
 			do {
 				name=Service.leggiStringa("Inserisci il nome della rete:" );
 				check = disp.sendNet(pn,name ,overWrite);
-				if(check==-1) {
+				switch(check){
+				case -1: 
 					overWrite=Service.risposta("Il file esiste già!!! Si desidera sovrascriverlo?");
 					if(overWrite)check = disp.sendNet(pn,name ,overWrite);
-					
-				}
-				if(check==-2) {
+					break;
+				case -2:
 					System.out.println("\nIl server non è in grado di salvare la rete.");
 					error=true;
 					break;
-				}
-				if(check==-3) {
+				case -3:
 					System.out.println("\nDevi inserire un nome di file valido.");
+					break;
+				case -4:
+					System.out.println("\nFile soggetto a lock. Scegliere un altro nome per la rete.");
+					break;
 				}
 			} while(check!=0);
 			
@@ -186,12 +189,12 @@ public class TetClient {
 	/**
 	 * Gestisce la modifica della priorità delle transizioni
 	 */
-	private void changeTransitionPriority(){
+	private void changeTransitionPriority() throws RemoteException{
 		int newPriority;
 		Transition t;
 		if(pn==null){
-			System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
-			return;
+				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+				return;
 		}
 		Vector<Transition> transitions = pn.getTransitions();
 		for(int i=0;i<transitions.size();i++){
