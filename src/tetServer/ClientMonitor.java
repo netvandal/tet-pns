@@ -72,6 +72,7 @@ public class ClientMonitor{
 	 */
 	public synchronized boolean addFileLock(int id, String fileName) {
 		try{
+			System.out.println("Lock di " + fileName + "   " +  id);
 			fileLockList.put(id, fileName);
 			return true;
 		}catch(NullPointerException e){

@@ -123,6 +123,7 @@ public class Dispenser implements IDispenser, Serializable {
 	 * Rimuove i blocchi dai file
 	 */
 	public void removeLock(int id) throws RemoteException{
+		System.out.println("Rimuovo lock da " + id);
 		cm.removeFileLock(id);
 	}
 
