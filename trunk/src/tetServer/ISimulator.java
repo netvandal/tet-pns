@@ -41,7 +41,7 @@ public interface ISimulator extends Remote {
 	 * Ferma la simulazione
 	 * @throws RemoteException
 	 */
-	public boolean stopSimulation(int id)	    throws RemoteException;
+	public boolean resetSimulator(int id)	    throws RemoteException;
 	
 	/**
 	 * Ritorna un vettore contenente le transizioni selezionabili

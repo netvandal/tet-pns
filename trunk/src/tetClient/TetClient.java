@@ -96,7 +96,6 @@ public class TetClient {
 	
 	private void loadNet() throws IOException{
 		boolean continua=true;
-		sim.stopSimulation(id);
 		do{
 			switch(loadNetMenu.scelta()){
 				case 1: File f = new File(Service.leggiStringa("Inserisci il nome del file: "));
@@ -133,6 +132,7 @@ public class TetClient {
 		
 		if(pn!=null){
 			//pn.getInfo();
+			sim.resetSimulator(id);
 			sim.setNet(pn, id);
 			System.out.println("Rete caricata correttamente.");
 			if(this.graph!=null)
@@ -284,18 +284,7 @@ public class TetClient {
 		//SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		while(!esci && oneStepBeyond())
 			esci = !Service.risposta("\nContinuare la simulazione ");
-		
-		try {
-			if(esci && remoteFile) {
-				remoteFile=false;
-				disp.removeLock(id);
-			}
-			sim.stopSimulation(id);
-			pn=null;
-		} catch(RemoteException e){
-			System.out.println("Problemi di connessione");
-			e.printStackTrace();
-		}
+
 		System.out.println("Fine della simulazione");
 	}
 	
@@ -304,7 +293,7 @@ public class TetClient {
 	 * @throws RemoteException 
 	 */
 	private void stopClient() throws RemoteException{
-		sim.stopSimulation(id);
+		sim.resetSimulator(id);
 		sim.deleteClient(id);
 		if(graph!=null)
 			this.graph.setVisible(false);

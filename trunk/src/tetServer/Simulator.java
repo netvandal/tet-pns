@@ -53,7 +53,7 @@ public class Simulator implements ISimulator, Serializable {
 	}
 
 
-	public boolean stopSimulation(int id) throws RemoteException {
+	public boolean resetSimulator(int id) throws RemoteException {
 		pList.remove(id);
 		cm.removeFileLock(id);
 		//cm.removeClient(id);
