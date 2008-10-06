@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientMonitor{ 
 	
@@ -11,17 +12,17 @@ public class ClientMonitor{
 	final static private long DEATH_THRESHOLD_DEBUG=15000; //15 secondi
 	
 	//Lista dei file bloccati
-	private HashMap<Integer, String> fileLockList = null;
+	private ConcurrentHashMap<Integer, String> fileLockList = null;
 	
 	//Lista dei client ancora "vivi"
-	private HashMap<Integer, Long> liveClientList = null;
+	private ConcurrentHashMap<Integer, Long> liveClientList = null;
 	
 	/**
 	 * Costruttore della classe ClientMonitor
 	 */
 	public ClientMonitor() {
-		fileLockList = new HashMap<Integer, String>();
-		liveClientList = new HashMap<Integer, Long>();
+		fileLockList = new ConcurrentHashMap<Integer, String>();
+		liveClientList = new ConcurrentHashMap<Integer, Long>();
 	}
 	
 	/**
