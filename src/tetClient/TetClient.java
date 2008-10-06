@@ -26,23 +26,26 @@ import tetServer.ISimulator;
 
 
 public class TetClient {
-	// creazione variabili per il menù
+	
+
+	
+	// creazione variabili per il men�
 	private final static String[] LOAD_NET_OPTION = {"Carica File Locale","Caricamento File Remoto","Torna al Menu Principale"};
 	private final static String[] MAIN_MENU_OPTION = {"Carica Rete","Avvia Simulazione","Salva Marcatura Corrente","Modifica Priorità","Esci"};
 	
 	private Menu mainMenu,loadNetMenu,repositoryMenu,simMenu;
 	
 	// variabili necessarie alla simulazione
-	private ClientHeart beat;
 	private ISimulator sim;
 	private IDispenser disp;
 	private PetriNet pn;
-	int id;						// id del client
 
 	private boolean remoteFile = false;
 	
 	// variabile per la gestione della finestra grafica
 	private GraphEditorTester graph; 
+	// id del client
+	int id;
 	
 	/**
 	 * Costruttore.
@@ -70,7 +73,7 @@ public class TetClient {
 				System.exit(1);
 			}
 			
-            beat = new ClientHeart(sim, id);
+            ClientHeart beat = new ClientHeart(sim, id);
             beat.start();
 			
 		}
@@ -96,12 +99,15 @@ public class TetClient {
 	
 	private void loadNet() throws IOException{
 		boolean continua=true;
+		sim.resetSimulator(id);
 		do{
 			switch(loadNetMenu.scelta()){
 				case 1: File f = new File(Service.leggiStringa("Inserisci il nome del file: "));
 					if(f.exists()){
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
+						if(pn==null)
+							System.out.println("\t\tAttenzione!!! Il file non è valido.");
 						remoteFile=false;
 					} 
 					else {
@@ -110,11 +116,9 @@ public class TetClient {
 				case 2: String[] file = disp.list();
 					if(file.length!=0){
 						repositoryMenu = new Menu("Repository",file);
-						//System.out.println("ID Client: " + id);
-						//System.out.println("Nome file: " + file[repositoryMenu.scelta()-1]);
+					
 						pn = disp.getNet(file[repositoryMenu.scelta()-1], id);
 						remoteFile=true;
-						if(pn==null)System.out.println("Problemi col caricamento della rete.");
 					}
 					else
 						System.out.println("Non ci sono reti nel Repository");
@@ -132,7 +136,6 @@ public class TetClient {
 		
 		if(pn!=null){
 			//pn.getInfo();
-			sim.resetSimulator(id);
 			sim.setNet(pn, id);
 			System.out.println("Rete caricata correttamente.");
 			if(this.graph!=null)
@@ -160,23 +163,22 @@ public class TetClient {
 			do {
 				name=Service.leggiStringa("Inserisci il nome della rete:" );
 				check = disp.sendNet(pn,name ,overWrite);
-				switch(check){
-				case -1: 
+				if(check==-1) {
 					overWrite=Service.risposta("Il file esiste già!!! Si desidera sovrascriverlo?");
-					if(overWrite)check = disp.sendNet(pn,name ,overWrite);
-					break;
-				case -2:
+					if(!overWrite) continue; else check = disp.sendNet(pn,name ,overWrite);
+					
+				}
+				if(check==-2) {
 					System.out.println("\nIl server non è in grado di salvare la rete.");
 					error=true;
-					break;
-				case -3:
-					System.out.println("\nDevi inserire un nome di file valido.");
-					break;
-				case -4:
-					System.out.println("\nFile soggetto a lock. Scegliere un altro nome per la rete.");
-					break;
 				}
-			} while(check!=0);
+				if(check==-3) {
+					System.out.println("\nDevi inserire un nome di file valido.");
+					continue;
+				}
+
+
+			} while(check!=0 && !error);
 			
 			if(!error)System.out.println("La marcatura è stata salvata correttamente.");
 		}
@@ -189,18 +191,18 @@ public class TetClient {
 	/**
 	 * Gestisce la modifica della priorità delle transizioni
 	 */
-	private void changeTransitionPriority() throws RemoteException{
+	private void changeTransitionPriority(){
 		int newPriority;
 		Transition t;
 		if(pn==null){
-				System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
-				return;
+			System.out.println("\nATTENZIONE!!! Non è stata caricata alcuna rete di Petri.");
+			return;
 		}
 		Vector<Transition> transitions = pn.getTransitions();
 		for(int i=0;i<transitions.size();i++){
 			t=transitions.get(i);
 			if((newPriority=Service.leggiInt("Inserire la nuova priorità per " + t.getId() + ":"))<0){
-				System.out.println("\nATTENZIONE!!! La priorità deve essere positiva o nulla.");
+				System.out.println("\nATTENZIONE!!! La priorità deve essere positiva.");
 				i--;
 			}
 			else
@@ -216,8 +218,8 @@ public class TetClient {
 
 	/**
 	 * Gestisce l'interazione utile all'avanzamento dello stato della rete
-	 * @return true se è possibile proseguire la simulazione
-	 * @return false se non è possibile proseguire la simulazione (DeadLock o errori)
+	 * @return true se � possibile proseguire la simulazione
+	 * @return false se non � possibile proseguire la simulazione (DeadLock o errori)
 	 */
 	private boolean oneStepBeyond(){
 		try{
@@ -287,7 +289,18 @@ public class TetClient {
 		//SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		while(!esci && oneStepBeyond())
 			esci = !Service.risposta("\nContinuare la simulazione ");
-
+		
+		try {
+			if(esci && remoteFile) {
+				remoteFile=false;
+				disp.removeLock(id);
+			}
+			//sim.stopSimulation(id);
+			
+		} catch(RemoteException e){
+			System.out.println("Problemi di connessione");
+			e.printStackTrace();
+		}
 		System.out.println("Fine della simulazione");
 	}
 	
@@ -296,8 +309,11 @@ public class TetClient {
 	 * @throws RemoteException 
 	 */
 	private void stopClient() throws RemoteException{
-		sim.resetSimulator(id);
-		sim.deleteClient(id);
+		boolean exit=true;
+		exit=Service.risposta("Sei sicuro di voler uscire? ");
+		if(!exit)return;
+		
+		sim.resetSimulator(id);	
 		if(graph!=null)
 			this.graph.setVisible(false);
 		System.out.println("Termine del programma.");
@@ -307,6 +323,7 @@ public class TetClient {
 	 * main
 	 * @param args
 	 */
+	
 	public static void main(String[] args) {
 		
 		
@@ -314,6 +331,7 @@ public class TetClient {
 		
 		try {
             TetClient tc = new TetClient();
+
             tc.mainMenu = new Menu("Menu Principale",MAIN_MENU_OPTION);
             do{
             	switch(tc.mainMenu.scelta()){
@@ -321,17 +339,15 @@ public class TetClient {
             		case 2:tc.manageSimulation();break;
 	            	case 3:tc.saveNet();break;
 	            	case 4:tc.changeTransitionPriority();break;
-	            	case 5:if(Service.risposta("Sei sicuro di voler uscire? ")){
-	            				tc.stopClient();
-	            				System.exit(0);
-	            			}
-	            			break;
+	            	case 5:tc.stopClient();
+	            		//continua=false;break;
+	            		System.exit(0);break;
 	            	default:break;
             	}
             }while(true);
 
         } catch (Exception e) {
-            System.out.println("Gravi problemi nel ciclo principale!!!.\n");
+            // Something wrong here
             e.printStackTrace();
         }
 		
