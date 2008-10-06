@@ -100,6 +100,7 @@ public class TetClient {
 	private void loadNet() throws IOException{
 		boolean continua=true;
 		sim.resetSimulator(id);
+
 		do{
 			switch(loadNetMenu.scelta()){
 				case 1: File f = new File(Service.leggiStringa("Inserisci il nome del file: "));
@@ -163,21 +164,23 @@ public class TetClient {
 			do {
 				name=Service.leggiStringa("Inserisci il nome della rete:" );
 				check = disp.sendNet(pn,name ,overWrite);
-				if(check==-1) {
+				switch(check) {
+				case -1:
 					overWrite=Service.risposta("Il file esiste già!!! Si desidera sovrascriverlo?");
 					if(!overWrite) continue; else check = disp.sendNet(pn,name ,overWrite);
-					
-				}
-				if(check==-2) {
+					break;
+				case -2: 
 					System.out.println("\nIl server non è in grado di salvare la rete.");
-					error=true;
-				}
-				if(check==-3) {
+					error=true;					
+					break;
+				case -3: 
 					System.out.println("\nDevi inserire un nome di file valido.");
-					continue;
+					break;					
+				case -4:
+					System.out.println("\nFile soggetto a Lock, impossibile utilizzare il nome scelto.");
+					break;
 				}
-
-
+				
 			} while(check!=0 && !error);
 			
 			if(!error)System.out.println("La marcatura è stata salvata correttamente.");
@@ -289,18 +292,8 @@ public class TetClient {
 		//SFRUTTA LA VALUTAZIONE IN CORTOCIRCUITO
 		while(!esci && oneStepBeyond())
 			esci = !Service.risposta("\nContinuare la simulazione ");
-		
-		try {
-			if(esci && remoteFile) {
-				remoteFile=false;
-				disp.removeLock(id);
-			}
-			//sim.stopSimulation(id);
-			
-		} catch(RemoteException e){
-			System.out.println("Problemi di connessione");
-			e.printStackTrace();
-		}
+
+
 		System.out.println("Fine della simulazione");
 	}
 	
@@ -314,6 +307,7 @@ public class TetClient {
 		if(!exit)return;
 		
 		sim.resetSimulator(id);	
+		sim.deleteClient(id);
 		if(graph!=null)
 			this.graph.setVisible(false);
 		System.out.println("Termine del programma.");
