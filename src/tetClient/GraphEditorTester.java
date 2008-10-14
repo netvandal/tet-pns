@@ -17,12 +17,12 @@ public class GraphEditorTester extends JFrame {
 	PetriNet pnz;
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private static final int  altezzaFinestra = 500;
+	private static final int largFinestra = 900;
 
 	public GraphEditorTester(PetriNet pn) {
-		
-		int altezzaFinestra = 500;
-		int largFinestra = 900;
+
 		
 		this.pnz = pn;
 		setTitle("T&TPnS Sim is fun... no, really!");
@@ -36,7 +36,7 @@ public class GraphEditorTester extends JFrame {
 	public void redraw(PetriNet pn) {
 		//System.out.println("redrawing");
 		getContentPane().remove(this.graphEditor);
-		this.graphEditor = new NetGraph(500, 500, pn);
+		this.graphEditor = new NetGraph(largFinestra, altezzaFinestra, pn);
 		getContentPane().add(graphEditor);
 		setVisible(false);
 		this.repaint();

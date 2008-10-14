@@ -8,8 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientMonitor{ 
 	
-	final static private long DEATH_THRESHOLD=300000; //5 minuti
-	final static private long DEATH_THRESHOLD_DEBUG=15000; //15 secondi
+	final static private long DEATH_THRESHOLD=60000; //1 minuto
 	
 	//Lista dei file bloccati
 	private ConcurrentHashMap<Integer, String> fileLockList = null;
@@ -39,7 +38,7 @@ public class ClientMonitor{
 	      Map.Entry me = (Map.Entry)i.next();
 	      lastBeatTime=(System.nanoTime()-Long.parseLong(me.getValue().toString()))/1000000;
 	      //System.out.println("Client: " + me.getKey().toString() + " Tempo di risposta:" + lastBeatTime);
-	      if(lastBeatTime>DEATH_THRESHOLD_DEBUG) {
+	      if(lastBeatTime>DEATH_THRESHOLD) {
 	    	  //System.out.println("Il client " + me.getKey() + " è morto!!!");
 	    	  removeFileLock(Integer.parseInt((me.getKey().toString())));
 	    	  //liveClientList.remove(me.getKey());
@@ -72,9 +71,13 @@ public class ClientMonitor{
 	 */
 	public synchronized boolean addFileLock(int id, String fileName) {
 		try{
-			System.out.println("Lock di " + fileName + "   " +  id);
-			fileLockList.put(id, fileName);
-			return true;
+			
+			//System.out.println("Lock di " + fileName + "   " +  id);
+			if(!fileLockList.containsValue(fileName)) {
+				fileLockList.put(id, fileName);
+				return true;
+			} else return false;
+				
 		}catch(NullPointerException e){
 			return false;
 		}
