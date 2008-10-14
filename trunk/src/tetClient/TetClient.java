@@ -99,6 +99,7 @@ public class TetClient {
 	
 	private void loadNet() throws IOException{
 		boolean continua=true;
+		boolean noMsg = false;
 		sim.resetSimulator(id);
 
 		do{
@@ -107,8 +108,6 @@ public class TetClient {
 					if(f.exists()){
 						Parser myParser = new Parser();
 						pn = myParser.parsePetriNet(f.getName());
-						if(pn==null)
-							System.out.println("\t\tAttenzione!!! Il file non è valido.");
 						remoteFile=false;
 					} 
 					else {
@@ -120,9 +119,11 @@ public class TetClient {
 					
 						pn = disp.getNet(file[repositoryMenu.scelta()-1], id);
 						remoteFile=true;
+						if(pn==null )	System.out.println("Problemi nel caricamento del file. Possibile Lock su file.");
 					}
 					else
 						System.out.println("Non ci sono reti nel Repository");
+						noMsg = true;
 					break;
 				case 3:continua=false;break;
 					
@@ -138,7 +139,7 @@ public class TetClient {
 		if(pn!=null){
 			//pn.getInfo();
 			sim.setNet(pn, id);
-			System.out.println("Rete caricata correttamente.");
+			if(!noMsg) System.out.println("Rete caricata correttamente.");
 			if(this.graph!=null)
 				this.graph.setVisible(false);
 			this.graph = new GraphEditorTester(pn);

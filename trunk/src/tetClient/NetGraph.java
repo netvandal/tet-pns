@@ -52,6 +52,10 @@ public class NetGraph extends PCanvas {
 	
 	public NetGraph(int width, int height, PetriNet pn) {
 		setPreferredSize(new Dimension(width, height));
+		this.removeInputEventListener(this.getPanEventHandler());
+		 
+		this.removeInputEventListener(this.getZoomEventHandler());
+
 
 		//aggiungo i vari layer alla finestra
 		getRoot().addChild(edgeLayer);
